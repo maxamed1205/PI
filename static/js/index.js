@@ -26,9 +26,7 @@ function toggleCreatePatientForm() {
     // Remise à zéro des champs
     document.getElementById('patient_name').value = '';
     document.getElementById('birthdate').value = '';
-    document.getElementById('age').style.display = 'block';
-    document.getElementById('age').value = '';
-    document.getElementById('ageDisplay').style.display = 'none';
+    document.getElementById('ageDisplay').style.display = 'block'; // Toujours visible maintenant
     document.getElementById('ageDisplay').innerText = '–';
     document.getElementById('weight').value = '';
     document.getElementById('height').value = '';
@@ -103,7 +101,6 @@ function onSelectPatientToEdit() {
 
             document.getElementById('birthdate').value = data.birthdate || '';
 
-            document.getElementById('age').style.display = 'none';
             document.getElementById('ageDisplay').style.display = 'block';
             document.getElementById('ageDisplay').innerText = calculateAge(data.birthdate) + " ans";
 
@@ -214,6 +211,7 @@ function savePatient() {
         const newEntry = {
             date: todayStr,
             weight: weight,
+            height: height,       // <-- 🆕 AJOUTER cette ligne !
             pathology: pathology,
             notes: notes // ✅ seulement ici
         };
@@ -268,13 +266,87 @@ function calculateAge(birthdateStr) {
 // --------------------------------------------------
 
 document.addEventListener('DOMContentLoaded', () => {
-    const leftInput = document.getElementById('patient_name');
-    const rightDisplay = document.getElementById('display_patient_name');
-    function syncNameToRight() {
-        rightDisplay.textContent = leftInput.value || '–';
-    }
-    leftInput.addEventListener('input', syncNameToRight);
+    const measureForm = document.getElementById('measureForm');
 
-    // Initialiser
-    syncNameToRight();
+    measureForm.addEventListener('submit', async function (e) {
+        e.preventDefault(); // ❌ Bloque l'envoi automatique du formulaire
+
+        const patientName = document.getElementById('patient_name').value.trim();
+
+        if (!patientName) {
+            alert("Veuillez entrer un nom de patient.");
+            return;
+        }
+
+        try {
+            // 🔎 Vérifie si la fiche patient existe côté serveur
+            const response = await fetch(`/check_patient_exists/${encodeURIComponent(patientName)}`);
+            const data = await response.json();
+
+            if (data.exists) {
+                // ✅ Fiche trouvée → Autorise l'envoi du formulaire
+                measureForm.submit();
+            } else {
+                // ❌ Fiche introuvable → Popup
+                alert("⚠️ Ce patient n'existe pas encore dans la base de données.\n\nVeuillez lui créer une fiche d'abord, s'il vous plaît !");
+            }
+        } catch (error) {
+            console.error("Erreur lors de la vérification du patient :", error);
+            alert("Une erreur est survenue pendant la vérification du patient.");
+        }
+    });
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const birthdateInput = document.getElementById('birthdate');
+    const ageDisplay = document.getElementById('ageDisplay');
+
+    birthdateInput.addEventListener('input', () => {
+        const birthdateStr = birthdateInput.value;
+        if (birthdateStr) {
+            const age = calculateAge(birthdateStr);
+            if (!isNaN(age)) {
+                ageDisplay.innerText = age + " ans";
+            }
+        } else {
+            ageDisplay.innerText = '–';
+        }
+    });
+});
+
+// --------------------------------------------------
+// Calcul automatique de l'âge lors de la saisie de la naissance
+// --------------------------------------------------
+
+document.addEventListener('DOMContentLoaded', () => {
+    const birthdateInput = document.getElementById('birthdate');
+    const ageInput = document.getElementById('age');
+
+    birthdateInput.addEventListener('input', () => {
+        const birthdateStr = birthdateInput.value;
+        if (birthdateStr) {
+            const age = calculateAge(birthdateStr);
+            if (!isNaN(age)) {
+                ageInput.value = age;
+            }
+        } else {
+            ageInput.value = '';
+        }
+    });
+});
+
+// --------------------------------------------------
+// Synchroniser automatiquement le champ "Nom" (input ↔ affichage)
+// --------------------------------------------------
+
+document.addEventListener('DOMContentLoaded', () => {
+    const patientNameInput = document.getElementById('patient_name');
+    const displayPatientName = document.getElementById('display_patient_name');
+
+    function syncPatientName() {
+        displayPatientName.textContent = patientNameInput.value.trim() || '–';
+    }
+
+    patientNameInput.addEventListener('input', syncPatientName);
+    syncPatientName(); // Mise à jour initiale
 });

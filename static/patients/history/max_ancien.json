@@ -1,0 +1,11 @@
+{
+    "patient_name": "Max",
+    "birthdate": "1999-06-09",
+    "age": 25,
+    "weight": 55,
+    "height": 165,
+    "sex": "M",
+    "pathology": "Vieux",
+    "mode": "create",
+    "notes": "Aime les sushis"
+}
