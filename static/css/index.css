@@ -33,6 +33,16 @@ body {
     padding: 30px 20px;
 }
 
+
+.button-edit {
+    background-color: #dc3545; /* Rouge */
+    margin-top: 10px;
+}
+.button-edit:hover {
+    background-color: #c82333;
+}
+
+
 /* --- COLONNE GAUCHE : Formulaire mesure --- */
 .left-container {
     background-color: #ffffff;

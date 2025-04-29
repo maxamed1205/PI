@@ -28,6 +28,18 @@
     <div class="right-container">
 
         {% include "components/patient_buttons.html" %}
+
+
+        <!-- ✅ FORMULAIRE DE MODIFICATION D'UNE FICHE EXISTANTE -->
+        <div id="editPatientForm" style="display: none; margin-top: 25px;">
+            <h2>Modifier une fiche existante</h2>
+
+            <label for="editPatientSelect">Sélectionner un patient :</label>
+            <select id="editPatientSelect" onchange="onSelectPatientToEdit()">
+                <!-- Options générées dynamiquement par JavaScript -->
+            </select>
+        </div>
+
         {% include "components/create_patient_form.html" %}
         {% include "components/load_patient_form.html" %}
 

@@ -42,19 +42,28 @@ def save_patient():
     try:
         data = request.get_json()
         name = data.get('patient_name')
+        mode = data.get('mode', 'create')
+
         if not name:
             return jsonify({"error": "Nom du patient manquant."}), 400
 
         os.makedirs('static/patients', exist_ok=True)
-        filename = name.replace(" ", "_").lower() + ".json"
-        filepath = os.path.join('static/patients', filename)
+        filepath = os.path.join('static/patients', name.replace(" ", "_").lower() + ".json")
 
+        # ➡️ Backup s'il s'agit d'une modification
+        if mode == 'edit' and os.path.exists(filepath):
+            os.makedirs('static/patients/history', exist_ok=True)
+            backup_path = os.path.join('static/patients/history', name.replace(" ", "_").lower() + "_ancien.json")
+            os.replace(filepath, backup_path)
+
+        # ➡️ Sauvegarde finale
         with open(filepath, 'w', encoding='utf-8') as f:
             json.dump(data, f, indent=4, ensure_ascii=False)
 
         return jsonify({"message": "Fiche patient sauvegardée."}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
 
 @app.route('/check_patient_exists/<patient_name>', methods=['GET'])
 def check_patient_exists(patient_name):

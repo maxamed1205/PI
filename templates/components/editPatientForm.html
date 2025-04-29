@@ -1,0 +1,31 @@
+<!-- SECTION D'ÉDITION DES PATIENTS -->
+<div id="editPatientSection" style="display: none; flex-direction: column; gap: 20px;">
+
+    <!-- 1. Liste déroulante pour choisir un patient -->
+    <div id="editPatientForm">
+        <label for="editPatientSelect">Choisir un patient :</label>
+        <select id="editPatientSelect" onchange="onSelectPatientToEdit()">
+            <option value="">-- Choisir un patient --</option>
+            <!-- Les options seront injectées ici -->
+        </select>
+    </div>
+
+    <!-- 2. Formulaire pour éditer (réutilise createPatientForm) -->
+    <div id="createPatientForm" style="display: none; flex-direction: column;">
+        <h2 id="formTitle">Modifier la fiche du patient</h2>
+
+        <!-- Ton formulaire ici (nom, naissance, poids, taille, etc.) -->
+        <input id="patient_name" type="text" placeholder="Nom du patient">
+        <input id="birthdate" type="date">
+        <input id="age" type="number" style="display: none;">
+        <div id="ageDisplay" style="display: none;"></div>
+        <input id="weight" type="number" placeholder="Poids">
+        <input id="height" type="number" placeholder="Taille">
+        <input id="sex" type="text" placeholder="Sexe">
+        <input id="pathology" type="text" placeholder="Pathologie">
+        <textarea id="notes" placeholder="Notes"></textarea>
+
+        <button onclick="savePatient()">Enregistrer</button>
+    </div>
+
+</div>
