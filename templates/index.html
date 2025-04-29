@@ -1,0 +1,49 @@
+{% set no_card = True %}
+
+{% extends "base.html" %}
+
+{% block title %}Accueil - Dispositif de mesure{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+<script src="{{ url_for('static', filename='js/index.js') }}" defer></script>
+{% endblock %}
+
+{% block content %}
+
+<!-- ✅ SECTION TITRE Bien séparé du reste -->
+<div class="header-container">
+    <h1>Bienvenue sur l'interface du dispositif médical</h1>
+</div>
+
+<!-- ✅ SECTION PRINCIPALE en 2 colonnes bien alignées -->
+<div class="main-container">
+
+    <!-- Zone gauche : Formulaire mesure -->
+    <div class="left-container">
+        {% include "components/measure_form.html" %}
+    </div>
+
+    <!-- Zone droite : Fiches patient -->
+    <div class="right-container">
+
+        {% include "components/patient_buttons.html" %}
+        {% include "components/create_patient_form.html" %}
+        {% include "components/load_patient_form.html" %}
+
+        <div id="patientPreview" style="display: none;">
+            <h3>Informations du patient sélectionné</h3>
+            <p><strong>Nom du patient :</strong> <span id="previewName"></span></p>
+            <p><strong>Date de naissance :</strong> <span id="previewBirthdate"></span></p>
+            <p><strong>Âge :</strong> <span id="previewAge"></span></p>
+            <p><strong>Poids :</strong> <span id="previewWeight"></span> kg</p>
+            <p><strong>Taille :</strong> <span id="previewHeight"></span> cm</p>
+            <p><strong>Sexe :</strong> <span id="previewSex"></span></p>
+            <p><strong>Pathologie :</strong> <span id="previewPathology"></span></p>
+            <p><strong>Notes :</strong> <span id="previewNotes"></span></p>
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,89 @@
+/* Style general de la page */
+body {
+    margin: 0; /* Supprime toute marge par defaut autour de la page */
+    font-family: Arial, sans-serif; /* Choisit la police d'ecriture Arial ou sans-serif */
+    background-color: #f5f5f5; /* Colore l'arriere-plan en gris tres clair */
+}
+
+/* Bannière CHUV */
+header {
+    width: 100%; /* La banniere occupe toute la largeur de la fenetre */
+    background-color: #009640; /* Couleur verte typique du CHUV */
+    padding: 0; /* Pas de marge interne */
+}
+
+/* Conteneur a l'interieur du header */
+.header-content {
+    display: flex; /* Utilise Flexbox pour aligner les elements horizontalement */
+    align-items: center; /* Centre verticalement l'image dans le header */
+    height: 120px; /* Hauteur totale du header */
+    padding-left: 20px; /* Ajoute 20 pixels d'espace a gauche */
+}
+
+/* Image du logo CHUV dans le header */
+.header-content img {
+    height: 80%; /* L'image prend 80% de la hauteur du header */
+    object-fit: contain; /* Redimensionne l'image sans la deformer */
+}
+
+/* Contenu principal */
+main {
+    display: flex; /* Utilise Flexbox pour organiser le contenu */
+    flex-direction: column; /* Aligne les elements de haut en bas */
+    align-items: center; /* Centre horizontalement tous les enfants */
+    margin-top: 40px; /* Ajoute un espace de 40 pixels en haut */
+}
+
+/* Carte centrale pour le formulaire ou le contenu */
+.card {
+    background-color: #ffffff; /* Fond blanc pour la carte */
+    padding: 30px 40px; /* Espace interieur : 30px en haut/bas et 40px a gauche/droite */
+    border-radius: 10px; /* Coins arrondis de 10 pixels */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Ombre douce autour de la carte */
+    max-width: 400px; /* Largeur maximale de la carte */
+    width: 100%; /* La carte occupe toute la largeur disponible jusqu'a 400px */
+}
+
+/* Titre principal */
+h1 {
+    font-size: 24px; /* Taille du texte du titre */
+    margin-bottom: 20px; /* Espace sous le titre */
+    text-align: center; /* Centre le titre horizontalement */
+    color: #333333; /* Couleur du texte en gris fonce */
+}
+
+/* Labels des champs de formulaire */
+label {
+    display: block; /* Chaque label commence sur une nouvelle ligne */
+    margin-top: 15px; /* Espace au-dessus du label */
+    margin-bottom: 5px; /* Espace en dessous du label */
+    font-weight: bold; /* Met le texte du label en gras */
+}
+
+/* Champs de texte et menus deroulants */
+input[type="text"], select {
+    width: 100%; /* Prend toute la largeur du conteneur */
+    padding: 10px; /* Espace interieur de 10px */
+    border: 1px solid #cccccc; /* Bord gris clair */
+    border-radius: 5px; /* Coins arrondis de 5px */
+    margin-bottom: 10px; /* Espace apres chaque champ */
+}
+
+/* Bouton de soumission */
+input[type="submit"] {
+    width: 100%; /* Le bouton prend toute la largeur disponible */
+    padding: 12px; /* Espace interieur de 12px */
+    background-color: #009640; /* Fond vert CHUV */
+    border: none; /* Pas de bord */
+    border-radius: 5px; /* Coins arrondis de 5px */
+    color: white; /* Texte blanc */
+    font-size: 16px; /* Taille du texte */
+    cursor: pointer; /* Curseur main au survol */
+    margin-top: 15px; /* Espace au-dessus du bouton */
+    transition: background-color 0.3s ease; /* Animation douce de la couleur au survol */
+}
+
+/* Effet visuel au survol du bouton */
+input[type="submit"]:hover {
+    background-color: #00b14f; /* Fond vert plus clair au survol */
+}

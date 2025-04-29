@@ -1,0 +1,200 @@
+/* --- GENERAL --- */
+body {
+    background-color: #f5f5f5;
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+/* --- HEADER (titre haut de page) --- */
+.header-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+.header-container h1 {
+    font-size: 22px;
+    color: #333;
+    margin: 0;
+    background-color: white;
+    padding: 32px 24px;
+    border-radius: 12px;
+    box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* --- CONTENEUR PRINCIPAL en colonnes --- */
+.main-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 60px; /* Espace entre les deux colonnes */
+    max-width: 1200px; /* ✅ Limite de largeur de la grille */
+    margin: 0 auto; /* ✅ Centre horizontalement */
+    padding: 30px 20px;
+}
+
+/* --- COLONNE GAUCHE : Formulaire mesure --- */
+.left-container {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.1);
+    flex: 1;
+    min-width: 450px;
+}
+
+/* --- COLONNE DROITE : Gestion patients --- */
+.right-container {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.1);
+    flex: 1;
+    min-width: 450px;
+    min-height: 300px; /* ✅ ajoute cette ligne */
+}
+
+/* --- CONTENEUR DES BOUTONS PATIENT --- */
+.patient-buttons-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px; /* ✅ espace entre les deux boutons */
+}
+
+/* --- FORMULAIRES --- */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* --- LABELS --- */
+label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+/* --- INPUTS, SELECTS, TEXTAREAS --- */
+/* --- INPUTS, SELECTS, TEXTAREAS --- */
+input[type="text"],
+input[type="date"],
+input[type="number"],
+select,
+textarea {
+    padding: 12px 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #ffffff;
+    font-size: 16px;
+    width: 100%;
+    box-sizing: border-box;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.06);
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="date"]:focus,
+input[type="number"]:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: #66afe9;
+    box-shadow: 0 0 8px rgba(102, 175, 233, 0.6);
+}
+
+
+/* --- BOUTONS --- */
+button, input[type="submit"] {
+    padding: 12px;
+    background-color: #28a745;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+button:hover, input[type="submit"]:hover {
+    background-color: #218838;
+    transform: scale(1.05);
+}
+
+/* --- BOUTONS CRÉER / CHARGER --- */
+.button-create {
+    background-color: #007bff;
+    margin-bottom: 10px;
+}
+.button-create:hover {
+    background-color: #0056b3;
+}
+
+.button-load {
+    background-color: #28a745;
+    margin-top: 10px; /* ✅ ajoute cette ligne */
+}
+.button-load:hover {
+    background-color: #1e7e34;
+    margin-top: 10px; /* ✅ ajoute cette ligne */
+}
+
+/* --- FORMULAIRES PATIENT MASQUÉS --- */
+#createPatientForm button {
+    margin-top: 20px;     /* ✅ Espace au-dessus du bouton */
+    align-self: center;   /* ✅ Centre horizontalement dans le formulaire */
+    width: fit-content;   /* ✅ Réduit la largeur au contenu */
+}
+
+#createPatientForm {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+
+#loadPatientForm,
+#patientPreview {
+    margin-top: 25px;
+    display: none;
+}
+
+.active {
+    display: block !important;
+    animation: fadeIn 0.5s ease;
+}
+/* --- APERÇU DU PATIENT --- */
+#patientPreview {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #dddddd;
+}
+
+#patientPreview p {
+    margin: 5px 0;
+    font-size: 15px;
+    color: #555555;
+}
+
+/* --- LISTE DÉROULANTE PATIENTS --- */
+#patientFile {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #cccccc;
+    background-color: #ffffff;
+    transition: box-shadow 0.3s ease, background-color 0.3s ease;
+}
+
+#patientFile:hover {
+    background-color: #f0f8ff;
+    box-shadow: 0 0 12px rgba(0, 123, 255, 0.3);
+}
+
+/* --- ANIMATION APPARITION --- */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}

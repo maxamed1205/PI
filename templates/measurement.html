@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{# Indique que ce fichier utilise base.html comme structure principale (heritage de template) #}
+
+{% block title %}Mesure de Force en Temps Reel{% endblock %}
+{# Definis le titre de la page qui sera affiche dans l'onglet du navigateur #}
+
+{% block head %}
+{# Debut du bloc head pour ajouter des fichiers CSS specifiques a cette page #}
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/measurement.css') }}">
+    {# Import du fichier CSS specifiquement pour la page de mesure #}
+
+{% endblock %}
+
+{% block content %}
+{# Debut de la partie principale du contenu specifique a cette page #}
+
+<!-- Texte patient en haut -->
+<div class="info">
+    {# Conteneur qui affiche les informations du patient sous forme de texte centre #}
+    Patient : <span class="highlight">{{ patient.patient_name }}</span> |
+    {# Affiche le nom du patient (variable injectee par le serveur) avec une mise en forme speciale #}
+    Doigt : <span class="highlight">{{ patient.finger }}</span> |
+    {# Affiche le doigt mesure (exemple : index, majeur) #}
+    Phalange : <span class="highlight">{{ patient.phalange }}</span> |
+    {# Affiche la partie du doigt mesuree (exemple : proximale, intermediaire) #}
+    Operateur : <span class="highlight">{{ patient.operator }}</span>
+    {# Affiche le nom de la personne qui realise la mesure #}
+</div>
+
+<!-- Bouton Sauvegarder -->
+<div class="save-button-container">
+    {# Conteneur pour centrer le bouton de sauvegarde #}
+    <button id="saveButton">Sauvegarder les donnees</button>
+    {# Bouton qui permettra d'envoyer les donnees en appuyant dessus #}
+</div>
+
+<!-- Bloc principal qui contient graphiques + bouton -->
+<div id="measurement-page">
+    {# Conteneur principal de toute la zone de mesure (graphes + bouton) #}
+
+    <div id="graphs-container">
+        {# Conteneur qui regroupe les deux panneaux de graphiques (force et amplitude) #}
+
+        <div id="left-panel">
+            {# Panneau de gauche reserve au graphe de la force #}
+            <h2>Force en fonction du temps</h2>
+            {# Titre pour le panneau de force #}
+            <div id="graph-force"></div>
+            {# Zone vide qui recevra le graphe de la force (remplie par JavaScript) #}
+        </div>
+
+        <div id="separator"></div>
+        {# Petite barre verticale qui separe le panneau gauche du panneau droit #}
+
+        <div id="right-panel">
+            {# Panneau de droite reserve au graphe d'amplitude (angle) #}
+            <h2>Amplitude en fonction du temps</h2>
+            {# Titre pour le panneau d'amplitude #}
+            <div id="graph-amplitude"></div>
+            {# Zone vide qui recevra le graphe d'amplitude (remplie par JavaScript) #}
+        </div>
+
+    </div>
+
+    <div class="new-measure-container">
+        {# Conteneur pour centrer le bouton Nouvelle mesure sous les graphes #}
+        <button id="newMeasureButton">Nouvelle mesure</button>
+        {# Bouton qui permet de retourner a l'accueil pour lancer une nouvelle mesure #}
+    </div>
+
+</div>
+
+{% endblock %}
+{# Fin du bloc de contenu principal de la page de mesure #}
+
+{% block scripts %}
+{# Debut du bloc scripts pour ajouter des fichiers JavaScript specifiques a cette page #}
+
+    <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
+    {# Importe la librairie Socket.IO pour permettre la communication en temps reel avec le serveur #}
+
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    {# Importe la librairie Plotly pour dessiner les graphes de force et amplitude #}
+
+    <script src="{{ url_for('static', filename='js/measurement.js') }}"></script>
+    {# Importe ton fichier JavaScript personnel measurement.js qui gere les mesures #}
+
+{% endblock %}
+{# Fin du bloc scripts #}
+

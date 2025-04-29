@@ -1,0 +1,114 @@
+/* --- STYLE GENERAL DE LA PAGE --- */
+body {
+    overflow-y: hidden; /* Desactive la barre de defilement verticale meme si le contenu depasse la hauteur de la fenetre */
+    margin: 0; /* Supprime toute marge externe par defaut autour du corps de la page */
+}
+
+/* --- STYLE DE L'INFORMATION DU PATIENT EN HAUT DE LA PAGE --- */
+.info {
+    text-align: center; /* Centre horizontalement le texte a l'interieur du bloc */
+    margin: 10px 0; /* Ajoute un espace de 10 pixels en haut et en bas du bloc, 0 a gauche et a droite */
+    font-size: 18px; /* Fixe la taille du texte a 18 pixels */
+    color: #555555; /* Colore le texte en gris fonce pour un meilleur contraste */
+}
+
+/* --- STYLE DES ELEMENTS A METTRE EN VALEUR (NOM DU PATIENT, DOIGT, ETC.) --- */
+.highlight {
+    color: #d9534f; /* Donne une couleur rouge vif aux textes importants */
+    font-weight: bold; /* Rend le texte en gras pour le rendre plus visible */
+}
+
+/* --- CONTENEUR DU BOUTON DE SAUVEGARDE --- */
+.save-button-container {
+    text-align: center; /* Centre horizontalement tout ce qui est a l'interieur (le bouton) */
+    margin-bottom: 10px; /* Ajoute un espace de 10 pixels en dessous du bouton */
+}
+
+/* --- STYLE DU BOUTON DE SAUVEGARDE --- */
+#saveButton {
+    padding: 12px 20px; /* Ajoute 12 pixels d'espace vertical et 20 pixels d'espace horizontal a l'interieur du bouton */
+    background-color: #0056b3; /* Met le fond du bouton en bleu fonce */
+    border: none; /* Supprime le contour par defaut du bouton */
+    border-radius: 8px; /* Arrondit legerement les coins du bouton avec 8 pixels de rayon */
+    color: white; /* Met la couleur du texte du bouton en blanc */
+    font-size: 16px; /* Fixe la taille du texte du bouton a 16 pixels */
+    cursor: pointer; /* Change la souris en forme de main quand on passe dessus */
+    transition: background-color 0.3s ease; /* Anime la couleur du fond quand on survole, en 0.3 secondes */
+}
+
+/* --- EFFET VISUEL QUAND LA SOURIS SURVOLE LE BOUTON DE SAUVEGARDE --- */
+#saveButton:hover {
+    background-color: #007bff; /* Change la couleur du fond en bleu plus clair pendant le survol */
+}
+
+/* --- CONTENEUR PRINCIPAL DE LA PAGE DE MESURE --- */
+#measurement-page {
+    display: flex; /* Utilise le modele Flexbox pour organiser les elements enfants */
+    flex-direction: column; /* Aligne les enfants verticalement (de haut en bas) */
+    height: 70vh; /* Fixe la hauteur a 70% de la hauteur visible de la fenetre */
+    width: 90vw; /* Fixe la largeur a 90% de la largeur visible de la fenetre */
+    margin: 0 auto; /* Centre horizontalement le conteneur dans la page */
+    background-color: #ffffff; /* Colore l'arriere-plan du conteneur en blanc */
+    border-radius: 10px; /* Arrondit les coins du conteneur avec 10 pixels de rayon */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Ajoute une ombre douce autour du conteneur */
+}
+
+/* --- CONTENEUR DES DEUX PANNEAUX DE GRAPHES --- */
+#graphs-container {
+    display: flex; /* Utilise Flexbox pour aligner les enfants (panneaux) horizontalement */
+    flex: 1; /* Fait en sorte que le conteneur prenne tout l'espace disponible restant */
+}
+
+/* --- PANNEAUX GAUCHE ET DROIT POUR LES GRAPHES --- */
+#left-panel, #right-panel {
+    flex: 1; /* Donne a chaque panneau la moitie de l'espace disponible */
+    display: flex; /* Utilise Flexbox a l'interieur du panneau */
+    flex-direction: column; /* Aligne les contenus des panneaux verticalement */
+    align-items: center; /* Centre horizontalement les elements a l'interieur du panneau */
+    justify-content: center; /* Centre verticalement les elements a l'interieur du panneau */
+    padding: 10px; /* Ajoute 10 pixels d'espace interieur autour du contenu */
+}
+
+/* --- BARRE DE SEPARATION ENTRE LES DEUX PANNEAUX --- */
+#separator {
+    width: 2px; /* Fixe la largeur de la barre a 2 pixels */
+    background-color: black; /* Colore la barre en noir */
+    height: auto; /* Permet a la hauteur de s'adapter automatiquement */
+    align-self: stretch; /* Force la barre a occuper toute la hauteur du conteneur parent */
+}
+
+/* --- DIMENSION DES DEUX GRAPHES --- */
+#graph-force, #graph-amplitude {
+    width: 90%; /* Fixe la largeur du graphe a 90% de la largeur de son panneau */
+    height: 90%; /* Fixe la hauteur du graphe a 90% de la hauteur de son panneau */
+}
+
+/* --- STYLE DES TITRES DES SECTIONS (FORCE ET AMPLITUDE) --- */
+h2 {
+    text-align: center; /* Centre horizontalement le texte du titre */
+    margin-bottom: 10px; /* Ajoute un espace de 10 pixels sous le titre */
+    font-size: 20px; /* Fixe la taille du texte du titre a 20 pixels */
+}
+
+/* --- CONTENEUR DU BOUTON NOUVELLE MESURE --- */
+.new-measure-container {
+    text-align: center; /* Centre horizontalement le bouton */
+    margin: 10px 0; /* Ajoute un espace de 10 pixels en haut et en bas */
+}
+
+/* --- STYLE DU BOUTON NOUVELLE MESURE --- */
+#newMeasureButton {
+    padding: 12px 20px; /* Ajoute 12 pixels verticalement et 20 pixels horizontalement d'espace interieur */
+    background-color: #c82333; /* Met le fond du bouton en rouge fonce */
+    border: none; /* Supprime le contour par defaut du bouton */
+    border-radius: 8px; /* Arrondit legerement les coins avec 8 pixels */
+    color: white; /* Colore le texte en blanc */
+    font-size: 16px; /* Fixe la taille du texte a 16 pixels */
+    cursor: pointer; /* Affiche un curseur de type main au survol */
+    transition: background-color 0.3s ease; /* Anime la couleur du fond en 0.3 secondes */
+}
+
+/* --- EFFET VISUEL QUAND LA SOURIS SURVOLE LE BOUTON NOUVELLE MESURE --- */
+#newMeasureButton:hover {
+    background-color: #dc3545; /* Change la couleur du fond en rouge plus clair pendant le survol */
+}

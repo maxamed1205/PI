@@ -1,0 +1,77 @@
+{% set no_card = True %}
+
+<!DOCTYPE html> 
+<!-- Declaration obligatoire pour indiquer que c'est un document HTML5 -->
+
+<html lang="fr">
+<!-- Debut du document HTML, en precisant que la langue est le francais -->
+
+<head>
+<!-- Partie "invisible" de la page : ici on met les informations techniques (titre, liens CSS, scripts) -->
+
+    <meta charset="UTF-8">
+    <!-- Definit que le texte utilise l'encodage UTF-8 (permet d'afficher correctement les caracteres speciaux) -->
+
+    <title>{% block title %}Accueil - Dispositif Medical{% endblock %}</title>
+    <!-- Titre de la page (ce qui apparait dans l'onglet du navigateur) -->
+    <!-- Le bloc title permet de changer dynamiquement le titre depuis chaque page qui herite de base.html -->
+
+    <!-- Import du fichier CSS principal -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <!-- Lien vers le fichier CSS commun a toutes les pages (stocke dans le dossier static/css/) -->
+
+    {% block head %}
+    {# Bloc optionnel pour ajouter du contenu supplementaire dans le <head> depuis une page specifique #}
+    {% endblock %}
+    <!-- Permet a une page comme measurement.html d'ajouter par exemple ses propres fichiers CSS -->
+    
+</head>
+
+<body>
+<!-- Corps visible de la page : tout ce que l'utilisateur verra a l'ecran -->
+
+    <!-- Bannière en haut avec le logo du CHUV -->
+    <header>
+    <!-- Zone reservee pour le bandeau du haut de la page -->
+
+        <div class="header-content">
+        <!-- Conteneur pour aligner correctement l'image du logo -->
+
+            <img src="{{ url_for('static', filename='image/chuv_logo.png') }}" alt="CHUV Logo">
+            <!-- Affiche l'image du logo CHUV, stockee dans le dossier static/ -->
+            <!-- Le alt est un texte alternatif qui s'affiche si l'image ne charge pas -->
+
+        </div>
+    </header>
+
+    <!-- Contenu principal de la page -->
+    <main>
+    <!-- Section centrale qui contient le contenu variable de chaque page -->
+
+        {% if not no_card %}
+        <!-- Si la variable no_card n'est pas definie ou est fausse, alors creer une carte (boite blanche) -->
+            <div class="card">
+            <!-- Debut de la carte (design avec fond blanc et bord arrondi) -->
+        {% endif %}
+        
+        {% block content %}
+        {% endblock %}
+        <!-- Bloc principal ou chaque page pourra ajouter son propre contenu specifique -->
+
+        {% if not no_card %}
+            </div>
+            <!-- Fin de la carte si elle a ete creee -->
+        {% endif %}
+        
+    </main>
+
+    {% block scripts %}
+    {# Bloc optionnel pour ajouter des fichiers JavaScript dans les pages filles #}
+    {% endblock %}
+    <!-- Permet a une page comme measurement.html d'ajouter ses propres scripts JS -->
+    <!-- Exemple : plotly.js pour les graphes, socket.io pour la communication en temps reel -->
+
+</body>
+
+</html>
+<!-- Fin du document HTML -->
