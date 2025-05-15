@@ -1,0 +1,12 @@
+*.pyc
+__pycache__/
+Maxamed/
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+dist/
+build/
+venv/
+.env
+*.swp

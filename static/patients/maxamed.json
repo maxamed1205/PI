@@ -1,0 +1,11 @@
+{
+    "patient_name": "Maxamed",
+    "birthdate": "1995-06-30",
+    "age": 29,
+    "weight": 55,
+    "height": 165,
+    "sex": "M",
+    "pathology": "Tendon Achille",
+    "mode": "create",
+    "notes": "âgée"
+}
