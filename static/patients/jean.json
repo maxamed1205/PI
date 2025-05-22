@@ -1,0 +1,11 @@
+{
+    "patient_name": "jean",
+    "birthdate": "2025-05-19",
+    "age": 0,
+    "weight": 70,
+    "height": 170,
+    "sex": "Autre",
+    "pathology": "douleur",
+    "mode": "create",
+    "notes": ""
+}

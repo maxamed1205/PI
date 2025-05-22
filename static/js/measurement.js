@@ -9,8 +9,18 @@ var forceData = []; // Liste vide pour stocker les valeurs de force (en Newtons)
 var angleTime = []; // Liste vide pour stocker les instants (temps) ou on recoit les mesures d'angle
 var angleData = []; // Liste vide pour stocker les valeurs d'amplitude (en degres)
 
-// --- FONCTION POUR AFFICHER LE GRAPHIQUE DE FORCE EN TEMPS REEL ---
+let latestDistal = null;
+let latestProximal = null;
 
+var angleDataProximal = []; // Stocke les valeurs d'angle proximal
+
+function getFormattedTime() {
+    var now = new Date();
+    return now.getMinutes().toString().padStart(2, '0') + ":" + now.getSeconds().toString().padStart(2, '0');
+}
+
+
+// --- FONCTION POUR AFFICHER LE GRAPHIQUE DE FORCE EN TEMPS REEL ---
 function plotForceGraph() { // Declaration de la fonction plotForceGraph
     Plotly.newPlot('graph-force', [{ // Cree un nouveau graphique dans l element HTML avec l id 'graph-force'
         x: forceTime, // Les points sur l'axe horizontal (temps)
@@ -28,20 +38,32 @@ function plotForceGraph() { // Declaration de la fonction plotForceGraph
 
 // --- FONCTION POUR AFFICHER LE GRAPHIQUE D'AMPLITUDE EN TEMPS REEL ---
 
-function plotAmplitudeGraph() { // Declaration de la fonction plotAmplitudeGraph
-    Plotly.newPlot('graph-amplitude', [{ // Cree un nouveau graphique dans l element HTML avec l id 'graph-amplitude'
-        x: angleTime, // Les points sur l'axe horizontal (temps)
-        y: angleData, // Les points sur l'axe vertical (amplitude)
-        mode: 'lines+markers', // Affiche lignes + points marques
-        name: 'Amplitude (deg)', // Nom de la courbe
-        line: {color: '#d9534f'} // Couleur de la ligne (rouge vif)
-    }], {
-        xaxis: {title: 'Temps (mm:ss)'}, // Titre de l'axe horizontal
-        yaxis: {title: 'Amplitude (deg)'}, // Titre de l'axe vertical
-        margin: {l: 50, r: 30, t: 20, b: 50}, // Marges autour du graphe
-        autosize: true // Adapte automatiquement la taille
-    }, {responsive: true}); // Rend adaptable a la taille de la fenetre
+function plotAmplitudeGraph() {
+    Plotly.newPlot('graph-amplitude', [
+        {
+            x: angleTime,
+            y: angleData,
+            mode: 'lines+markers',
+            name: 'Distal (°)',
+            line: { color: '#d9534f' } // Rouge
+        },
+        {
+            x: angleTime,
+            y: angleDataProximal,
+            mode: 'lines+markers',
+            name: 'Proximal (°)',
+            line: { color: '#007bff' } // Bleu
+        }
+    ], {
+        xaxis: { title: 'Temps (mm:ss)' },
+        yaxis: { title: 'Amplitude (°)' },
+        margin: { l: 50, r: 30, t: 20, b: 50 },
+        autosize: true
+    }, { responsive: true });
+
+    console.log("⏱️ Graph:", angleTime.length, angleData.length, angleDataProximal.length);
 }
+
 
 // --- RECEPTION DES NOUVELLES DONNEES DE FORCE EN TEMPS REEL ---
 
@@ -56,16 +78,47 @@ socket.on('force_update', function(data) { // Quand un message de type 'force_up
 
 // --- RECEPTION DES NOUVELLES DONNEES D'AMPLITUDE EN TEMPS REEL ---
 
-socket.on('amplitude_update', function(data) { // Quand un message de type 'amplitude_update' est recu depuis le serveur
-    var now = new Date(); // Cree un nouvel objet Date avec l'heure actuelle
-    var formattedTime = now.getMinutes().toString().padStart(2, '0') + ":" + now.getSeconds().toString().padStart(2, '0');
-    // Formate l'heure actuelle en mm:ss avec ajout de zeros si necessaire
-    angleTime.push(formattedTime); // Ajoute le temps formate dans la liste angleTime
-    angleData.push(data.amplitude); // Ajoute la valeur d'amplitude recue dans la liste angleData
-    plotAmplitudeGraph(); // Redessine le graphique avec les nouvelles donnees
+// --- RECEPTION DES ANGLES DISTAL ET PROXIMAL ---
+socket.on('angle_distal_update', function(data) {
+    console.log("📥 Reçu distal", data['Angle distale']);  // 👈 AJOUT
+    latestDistal = parseFloat(data['Angle distale']).toFixed(1);
+    document.getElementById('angle-distal').textContent = latestDistal;
+    maybePlotNewPoint();
 });
 
+socket.on('angle_proximal_update', function(data) {
+    console.log("📥 Reçu proximal", data['Angle proximal']);  // 👈 AJOUT
+    latestProximal = parseFloat(data['Angle proximal']).toFixed(1);
+    document.getElementById('angle-proximal').textContent = latestProximal;
+    maybePlotNewPoint();
+});
+
+function maybePlotNewPoint() {
+    if (latestDistal !== null && latestProximal !== null) {
+        const now = getFormattedTime();
+        angleTime.push(now);
+        angleData.push(parseFloat(latestDistal));
+        angleDataProximal.push(parseFloat(latestProximal));
+
+        console.log("[✔️ PLOT]", now, "Distal:", latestDistal, "Proximal:", latestProximal);  // 👈 AJOUT
+
+        plotAmplitudeGraph();
+
+        latestDistal = null;
+        latestProximal = null;
+    }
+}
+
+
+
+
 // --- ADAPTE LES GRAPHES QUAND ON CHANGE LA TAILLE DE LA FENETRE ---
+
+// --- POINT DE TEST POUR INITIALISER LE GRAPHE D’AMPLITUDE (TEMPORAIRE) ---
+angleTime.push("00:00");
+angleData.push(0);
+angleDataProximal.push(0);
+plotAmplitudeGraph();
 
 window.addEventListener('resize', function() { // Ajoute un ecouteur sur l'evenement resize (redimensionnement)
     plotForceGraph(); // Redessine le graphe de force

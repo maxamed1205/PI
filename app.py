@@ -9,6 +9,8 @@ from datetime import datetime
 from hx711_lgpio import HX711
 import numpy as np
 import time
+from bmi270.BMI270 import *
+from accelerometer.lib.read_angle import ReadAngle_IMU
 
 app = Flask(__name__)
 socketio = SocketIO(app, async_mode="threading")
@@ -22,10 +24,15 @@ SEUIL_VARIATION: np.float32 = np.float32(0.1)
 FACTEUR_ETALONNAGE: np.float32 = np.float32(80.65)
 OFFSET: np.float32 = np.float32(-149098.0)
 
+SEUIL_VARIATION_ANGLE_DISTAL: np.int32 = np.int32(1)  # seuil en degrés
+
 assert DOUT_PIN in range(0, 28)
 assert SCK_PIN in range(0, 28)
 
 hx = HX711(dout_pin=DOUT_PIN, pd_sck_pin=SCK_PIN)
+
+bus_num = [0,1,2]
+ang = ReadAngle_IMU(bus_num, I2C_PRIM_ADDR)  
 
 @app.route('/')
 def home():
@@ -170,7 +177,29 @@ def read_force_continuously():
             last_force = force
             socketio.emit('force_update', {'force': float(force)})
         time.sleep(0.1)
+def lire_angle() -> np.int32:
+    try:
+        angle_distal, angle_proximal = ang.read_angle()
+        return angle_distal, angle_proximal
+    except Exception as e:
+        print(f"Erreur capteur: {e}")
+        return np.int32(0)
 
+def read_angle_distal_continuously():
+    last_angle_distal = None
+    last_angle_proximal = None
+    while True:
+        angle_distal, angle_proximal = lire_angle()
+        if last_angle_distal is None or np.abs(angle_distal - last_angle_distal) >= SEUIL_VARIATION_ANGLE_DISTAL:
+            last_angle_distal = angle_distal
+            socketio.emit('angle_distal_update', {
+                          'Angle distale': float(angle_distal)})
+        if last_angle_proximal is None or np.abs(angle_proximal - last_angle_proximal) >= SEUIL_VARIATION_ANGLE_DISTAL:
+            last_angle_proximal = angle_proximal
+            socketio.emit('angle_proximal_update', {
+                          'Angle proximal': float(angle_proximal)})
+        # print(f"[IMU] Distal: {angle_distal}, Proximal: {angle_proximal}")
+        time.sleep(0.1)
 def cleanup():
     print("Nettoyage GPIO")
     hx.cleanup()
@@ -185,6 +214,7 @@ async def reset():
 def on_connect():
     print("Client connecté")
     socketio.start_background_task(read_force_continuously)
+    socketio.start_background_task(read_angle_distal_continuously) 
 
 if __name__ == "__main__":
     asyncio.run(reset())
