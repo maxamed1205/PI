@@ -137,7 +137,7 @@ class ReadAngle_IMU:
             # Calculate the angles between the IMUs 
             # to find the angles of the phalanges
             self.angle_distal = np.int32(np.round(abs(angle_3 - angle_2)))
-            self.angle_proximal = np.int32(np.round(abs(angle_3 - angle_1)))
+            self.angle_proximal = np.int32(np.round(abs(angle_2 - angle_1)))
 
         except Exception as e:
             print("Error: " + str(e))

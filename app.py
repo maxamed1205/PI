@@ -112,14 +112,15 @@ def handle_save_data(data):
         os.makedirs('historique', exist_ok=True)
         patient = data['patient']
         force = data['force']
-        angle = data['amplitude']
+        angle_prox = data['amplitude_proximal']
+        angle_dist = data['amplitude_distal']
 
         now = datetime.now()
         date_str = now.strftime("%Y-%m-%d_%H-%M")
         filename = f"{patient['patient_name']}_{patient['finger']}_{patient['phalange']}_{patient['operator']}_{date_str}.txt"
         filepath = os.path.join('historique', filename)
 
-        max_len = max(len(force['time']), len(angle['time']))
+        max_len = max(len(force['time']), len(angle_prox['time']), len(angle_dist['time']))
         col_width_time = 18
         col_width_value = 12
 
@@ -133,31 +134,40 @@ def handle_save_data(data):
             header = (
                 "Temps (mm:ss) F".ljust(col_width_time) + " | " +
                 "Force (N)".ljust(col_width_value) + " | " +
-                "Temps (mm:ss) A".ljust(col_width_time) + " | " +
-                "Amplitude (°)".ljust(col_width_value) + "\n"
+                "Temps Aprox".ljust(col_width_time) + " | " +
+                "Angle PIP (°)".ljust(col_width_value) + " | " +
+                "Temps Adist".ljust(col_width_time) + " | " +
+                "Angle DIP (°)".ljust(col_width_value) + "\n"
             )
             file.write(header)
 
             for i in range(max_len):
                 f_time = force['time'][i] if i < len(force['time']) else ''
                 f_val = force['data'][i] if i < len(force['data']) else ''
-                a_time = angle['time'][i] if i < len(angle['time']) else ''
-                a_val = angle['data'][i] if i < len(angle['data']) else 'NaN'
+                p_time = angle_prox['time'][i] if i < len(angle_prox['time']) else ''
+                p_val = angle_prox['data'][i] if i < len(angle_prox['data']) else 'NaN'
+                d_time = angle_dist['time'][i] if i < len(angle_dist['time']) else ''
+                d_val = angle_dist['data'][i] if i < len(angle_dist['data']) else 'NaN'
 
                 f_val_str = f"{float(f_val):.2f}" if f_val != '' else ''
-                a_val_str = f"{float(a_val):.2f}" if a_val not in ('', 'NaN') else 'NaN'
+                p_val_str = f"{float(p_val):.2f}" if p_val not in ('', 'NaN') else 'NaN'
+                d_val_str = f"{float(d_val):.2f}" if d_val not in ('', 'NaN') else 'NaN'
 
                 line = (
                     str(f_time).ljust(col_width_time) + " | " +
                     str(f_val_str).ljust(col_width_value) + " | " +
-                    str(a_time).ljust(col_width_time) + " | " +
-                    str(a_val_str).ljust(col_width_value) + "\n"
+                    str(p_time).ljust(col_width_time) + " | " +
+                    str(p_val_str).ljust(col_width_value) + " | " +
+                    str(d_time).ljust(col_width_time) + " | " +
+                    str(d_val_str).ljust(col_width_value) + "\n"
                 )
                 file.write(line)
 
         print(f"Données sauvegardées dans {filepath}")
+
     except Exception as e:
         print(f"Erreur lors de la sauvegarde : {e}")
+
 
 def lire_force() -> np.float32:
     try:

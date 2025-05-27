@@ -1,7 +1,8 @@
 /* --- STYLE GENERAL DE LA PAGE --- */
 body {
-    overflow-y: hidden; /* Desactive la barre de defilement verticale meme si le contenu depasse la hauteur de la fenetre */
+    /* overflow-y: hidden; /* Desactive la barre de defilement verticale meme si le contenu depasse la hauteur de la fenetre */
     margin: 0; /* Supprime toute marge externe par defaut autour du corps de la page */
+    overflow-y: auto;
 }
 
 /* --- STYLE DE L'INFORMATION DU PATIENT EN HAUT DE LA PAGE --- */
@@ -111,4 +112,25 @@ h2 {
 /* --- EFFET VISUEL QUAND LA SOURIS SURVOLE LE BOUTON NOUVELLE MESURE --- */
 #newMeasureButton:hover {
     background-color: #dc3545; /* Change la couleur du fond en rouge plus clair pendant le survol */
+}
+
+/* --- CLASSE POUR CACHER UN ÉLÉMENT --- */
+.hidden {
+    display: none;
+}
+
+/* --- STYLE DU GRAPHE FORCE/ANGLE SELON LA PHALANGE LIBRE --- */
+
+#phalange-force-container {
+    width: 90%;
+    margin: 50px auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+#graph-force-vs-angle {
+    width: 100%;
+    height: 600px; /* ou 800px selon ton besoin */
 }

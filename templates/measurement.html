@@ -35,11 +35,19 @@
     {# Bouton qui permettra d'envoyer les donnees en appuyant dessus #}
 </div>
 
+<!-- Nouveau graphique : Force en fonction de l'angle libre -->
+<div id="phalange-force-container">
+    <h2 style="text-align: center;">Force en fonction de l'angle mesuré (libre)</h2>
+    <div id="graph-force-vs-angle"></div>
+</div>
+
 <!-- Bloc principal qui contient graphiques + bouton -->
 <div id="measurement-page">
     {# Conteneur principal de toute la zone de mesure (graphes + bouton) #}
 
+
     <div id="graphs-container">
+
         {# Conteneur qui regroupe les deux panneaux de graphiques (force et amplitude) #}
 
         <div id="left-panel">
@@ -67,8 +75,13 @@
             <div id="graph-amplitude"></div>
             {# Zone vide qui recevra le graphe d'amplitude (remplie par JavaScript) #}
         </div>
-
     </div>
+
+    <!-- Bouton Afficher / Cacher les graphiques -->
+    <div style="text-align: center; margin-top: 10px;">
+        <button id="toggleGraphsButton">Cacher les graphiques</button>
+    </div>
+
 
     <div class="new-measure-container">
         {# Conteneur pour centrer le bouton Nouvelle mesure sous les graphes #}
@@ -89,6 +102,11 @@
 
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     {# Importe la librairie Plotly pour dessiner les graphes de force et amplitude #}
+
+    <script>
+        window.blockedPhalange = "{{ patient.phalange|lower }}";
+        console.log("📦 Phalange bloquée (depuis Jinja):", window.blockedPhalange);
+    </script>
 
     <script src="{{ url_for('static', filename='js/measurement.js') }}"></script>
     {# Importe ton fichier JavaScript personnel measurement.js qui gere les mesures #}
