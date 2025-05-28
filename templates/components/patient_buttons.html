@@ -1,7 +1,24 @@
 <!-- ✅ Nouveau conteneur des boutons -->
 <div class="patient-buttons-container">
+<!-- <div> : conteneur principal qui regroupe les trois boutons d'action relatifs aux fiches patient -->
+<!-- class="patient-buttons-container" : classe CSS permettant de styliser et d’organiser l’affichage des boutons (souvent en ligne ou en grille, selon le CSS défini ailleurs) -->
+
     <button type="button" class="button-create" onclick="toggleCreatePatientForm()">🔵 Créer une nouvelle fiche patient</button>
+    <!-- <button> : bouton cliquable destiné à lancer l’action de création d’une fiche patient -->
+    <!-- type="button" : indique que ce bouton n’est pas un bouton de soumission de formulaire, il agit uniquement via JavaScript -->
+    <!-- class="button-create" : classe utilisée pour appliquer un style visuel spécifique à ce bouton (couleur, taille, marge, etc.) -->
+    <!-- onclick="toggleCreatePatientForm()" : déclenche une fonction JavaScript au clic pour afficher ou masquer le formulaire de création -->
+    <!-- Texte affiché : inclut un emoji visuel (🔵) et une description claire de l’action ("Créer une nouvelle fiche patient") -->
+
     <button type="button" class="button-load" onclick="toggleLoadPatientForm()">🟢 Charger un patient existant</button>
+    <!-- Bouton permettant d’afficher la section de chargement d’une fiche déjà existante -->
+    <!-- class="button-load" : style distinct pour ce bouton -->
+    <!-- onclick="toggleLoadPatientForm()" : appelle une fonction JS pour faire apparaître ou disparaître le formulaire correspondant -->
+
     <button type="button" class="button-edit" onclick="toggleEditPatientForm()">🛠️ Modifier une fiche existante</button>
+    <!-- Dernier bouton : permet d'accéder à la section d’édition d’un patient existant -->
+    <!-- class="button-edit" : applique un style visuel propre à ce bouton -->
+    <!-- onclick="toggleEditPatientForm()" : gère dynamiquement l’affichage du formulaire d’édition -->
+    <!-- L’emoji 🛠️ renforce visuellement l’idée de modification ou de réparation -->
 
 </div>

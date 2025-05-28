@@ -1,26 +1,75 @@
 <!-- Formulaire principal pour démarrer la mesure -->
 <form id="measureForm" action="/start_measurement" method="POST">
+<!-- <form> : balise HTML qui encapsule l’ensemble du formulaire -->
+<!-- id="measureForm" : identifiant unique permettant de cibler ce formulaire via JavaScript si besoin -->
+<!-- action="/start_measurement" : définit l’URL vers laquelle les données seront envoyées lors de la soumission -->
+<!-- method="POST" : méthode HTTP utilisée pour l’envoi — ici POST car on envoie des données sensibles/modifiables -->
+
     <label for="patient_name">Nom du patient :</label>
+    <!-- <label> : décrit le champ qui suit pour une meilleure accessibilité -->
+    <!-- for="patient_name" : relie ce label au champ input ayant l’ID correspondant -->
+
     <input type="text" id="patient_name" name="patient_name" required>
+    <!-- <input> : champ de saisie texte pour entrer le nom du patient -->
+    <!-- type="text" : indique que l'on attend une chaîne de caractères -->
+    <!-- id="patient_name" : identifiant unique utilisé pour associer le champ au label et pour manipulation JS -->
+    <!-- name="patient_name" : clé utilisée dans le corps de la requête HTTP envoyée au backend -->
+    <!-- required : rend ce champ obligatoire à remplir avant soumission du formulaire -->
 
     <label for="finger">Doigt :</label>
+    <!-- Label pour le menu déroulant de sélection du doigt mesuré -->
+
     <select id="finger" name="finger" required>
+    <!-- <select> : champ permettant de choisir une option dans une liste prédéfinie -->
+    <!-- id="finger" : identifiant utilisé par le label, ou manipulable par JavaScript -->
+    <!-- name="finger" : valeur envoyée au serveur sous cette clé -->
+    <!-- required : l’utilisateur doit obligatoirement choisir une option -->
+
         <option value="index">Index</option>
+        <!-- <option> : élément de menu représentant un doigt disponible pour la mesure -->
+        <!-- value="index" : c’est cette valeur (et non le texte "Index") qui sera envoyée au serveur -->
+
         <option value="pouce">Pouce</option>
+        <!-- value="pouce" : identifie le pouce comme doigt sélectionné -->
+
         <option value="majeur">Majeur</option>
+        <!-- valeur représentant le majeur -->
+
         <option value="annulaire">Annulaire</option>
+        <!-- valeur représentant l’annulaire -->
+
         <option value="auriculaire">Auriculaire</option>
+        <!-- valeur représentant l’auriculaire -->
     </select>
 
     <label for="phalange">Phalange bloquée :</label>
+    <!-- Label décrivant le menu de sélection de la phalange à bloquer pendant la mesure -->
+
     <select id="phalange" name="phalange" required>
+    <!-- Menu déroulant pour choisir la phalange bloquée -->
+    <!-- id="phalange" : pour lier le champ au label -->
+    <!-- name="phalange" : nom de la variable envoyée au backend -->
+    <!-- required : l’utilisateur doit obligatoirement faire une sélection -->
+
         <option value="proximale">Proximale</option>
+        <!-- valeur pour la phalange la plus proche de la paume -->
+
         <option value="intermediaire">Intermédiaire</option>
+        <!-- valeur pour la phalange du milieu -->
+
         <option value="distale">Distale</option>
+        <!-- valeur pour la phalange la plus éloignée (vers l’extrémité du doigt) -->
     </select>
 
     <label for="operator">Opérateur :</label>
+    <!-- Label associé au champ de saisie de l'opérateur (personne qui effectue la mesure) -->
+
     <input type="text" id="operator" name="operator" required>
+    <!-- Champ de texte pour entrer le nom ou identifiant de l’opérateur -->
+    <!-- Obligatoire grâce à required -->
 
     <input type="submit" value="Démarrer la mesure">
+    <!-- Bouton de soumission du formulaire -->
+    <!-- type="submit" : déclenche l’envoi des données vers l’URL spécifiée dans action -->
+    <!-- value="Démarrer la mesure" : texte affiché sur le bouton -->
 </form>

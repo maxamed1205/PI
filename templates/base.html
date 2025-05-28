@@ -3,6 +3,7 @@
 
 <html lang="fr">
 <!-- Debut du document HTML, en precisant que la langue est le francais -->
+<!-- important pour l'accessibilité et le référencement -->
 
 <head>
 <!-- Partie "invisible" de la page : ici on met les informations techniques (titre, liens CSS, scripts) -->
@@ -17,6 +18,9 @@
     <!-- Import du fichier CSS principal -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
     <!-- Lien vers le fichier CSS commun a toutes les pages (stocke dans le dossier static/css/) -->
+    <!-- rel="stylesheet" : Indique que le fichier lié est une feuille de style CSS -->
+    <!-- {{ }} : Syntaxe spécifique à Jinja2 (Flask/Django) qui génère dynamiquement l'URL vers le fichier CSS situé dans le dossier "static/css" -->
+
 
     {% block head %}
     {# Bloc optionnel pour ajouter du contenu supplementaire dans le <head> depuis une page specifique #}
@@ -30,13 +34,17 @@
 
     <!-- Bannière en haut avec le logo du CHUV -->
     <header>
-    <!-- Zone reservee pour le bandeau du haut de la page -->
+    <!-- Zone reservee pour le bandeau du haut de la page, utilisé pour afficher un logo ou une barre de navigation -->
 
         <div class="header-content">
         <!-- Conteneur pour aligner correctement l'image du logo -->
+        <!-- <div> : Balise générique pour regrouper et styliser des éléments HTML -->
+        <!-- class : Attribut utilisé pour appliquer du CSS à un élément HTML particulier (ici pour aligner correctement le logo) -->
+
 
             <img src="{{ url_for('static', filename='image/chuv_logo.png') }}" alt="CHUV Logo">
             <!-- Affiche l'image du logo CHUV, stockee dans le dossier static/ -->
+            <!-- src : Chemin vers l'image à charger, généré dynamiquement par Jinja2 avec {{ }} -->
             <!-- Le alt est un texte alternatif qui s'affiche si l'image ne charge pas -->
 
         </div>
@@ -47,7 +55,7 @@
     <!-- Section centrale qui contient le contenu variable de chaque page -->
 
         {% if not no_card %}
-        <!-- Si la variable no_card n'est pas definie ou est fausse, alors creer une carte (boite blanche) -->
+        <!-- Condition Jinja2 : Si la variable no_card n'est pas definie ou est fausse, alors creer une carte (boite blanche) -->
             <div class="card">
             <!-- Debut de la carte (design avec fond blanc et bord arrondi) -->
         {% endif %}

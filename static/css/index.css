@@ -1,210 +1,219 @@
 /* --- GENERAL --- */
 body {
-    background-color: #f5f5f5;
-    margin: 0;
-    font-family: Arial, sans-serif;
+    background-color: #f5f5f5; /* Définit la couleur de fond de toute la page en gris très clair */
+    margin: 0; /* Supprime toute marge par défaut du navigateur autour du body */
+    font-family: Arial, sans-serif; /* Définit la police par défaut comme Arial ou une police sans-serif */
 }
 
 /* --- HEADER (titre haut de page) --- */
 .header-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
+    display: flex; /* Utilise Flexbox pour aligner horizontalement les éléments enfants */
+    justify-content: center; /* Centre horizontalement le contenu (le <h1>) */
+    align-items: center; /* Centre verticalement le contenu dans le header */
+    padding: 20px; /* Ajoute un espace intérieur autour du contenu du header */
 }
+
 .header-container h1 {
-    font-size: 22px;
-    color: #333;
-    margin: 0;
-    background-color: white;
-    padding: 32px 24px;
-    border-radius: 12px;
-    box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.1);
+    font-size: 22px; /* Définit une taille de texte moyenne pour le titre principal */
+    color: #333; /* Texte en gris foncé pour un bon contraste */
+    margin: 0; /* Supprime la marge par défaut du <h1> */
+    background-color: white; /* Met un fond blanc derrière le titre (effet de "carte") */
+    padding: 32px 24px; /* Ajoute de l'espace autour du texte : 32px en haut/bas et 24px à gauche/droite */
+    border-radius: 12px; /* Arrondit les coins du bloc titre */
+    box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.1); /* Ajoute une ombre subtile autour du titre */
 }
 
 /* --- CONTENEUR PRINCIPAL en colonnes --- */
 .main-container {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    gap: 60px; /* Espace entre les deux colonnes */
-    max-width: 1200px; /* ✅ Limite de largeur de la grille */
-    margin: 0 auto; /* ✅ Centre horizontalement */
-    padding: 30px 20px;
+    display: flex; /* Utilise Flexbox pour disposer les colonnes côte à côte */
+    justify-content: center; /* Centre l’ensemble des colonnes horizontalement dans la page */
+    align-items: flex-start; /* Aligne les colonnes par le haut */
+    gap: 60px; /* Espace horizontal de 60px entre les deux colonnes */
+    max-width: 1200px; /* Largeur maximale du conteneur principal (évite qu’il s’étale trop sur grands écrans) */
+    margin: 0 auto; /* Centre le conteneur horizontalement grâce à la marge automatique */
+    padding: 30px 20px; /* Ajoute de l’espace intérieur : 30px verticalement et 20px horizontalement */
 }
 
-
+/* --- Bouton pour modifier une fiche patient --- */
 .button-edit {
-    background-color: #dc3545; /* Rouge */
-    margin-top: 10px;
+    background-color: #dc3545; /* Couleur de fond rouge pour indiquer une action importante */
+    margin-top: 10px; /* Espace au-dessus du bouton */
 }
 .button-edit:hover {
-    background-color: #c82333;
+    background-color: #c82333; /* Rouge plus foncé au survol, pour retour visuel */
 }
 
-
-/* --- COLONNE GAUCHE : Formulaire mesure --- */
+/* --- COLONNE GAUCHE : Formulaire de mesure --- */
 .left-container {
-    background-color: #ffffff;
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.1);
-    flex: 1;
-    min-width: 450px;
+    background-color: #ffffff; /* Fond blanc pour un look propre et lisible */
+    padding: 30px; /* Espace intérieur de 30px tout autour */
+    border-radius: 12px; /* Coins arrondis pour un style moderne */
+    box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.1); /* Ombre légère pour créer un effet de carte en relief */
+    flex: 1; /* Fait en sorte que la colonne prenne une part égale de l’espace disponible */
+    min-width: 450px; /* Largeur minimale pour éviter que le formulaire soit trop étroit */
 }
 
-/* --- COLONNE DROITE : Gestion patients --- */
+/* --- COLONNE DROITE : Section de gestion des patients --- */
 .right-container {
-    background-color: #ffffff;
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.1);
-    flex: 1;
-    min-width: 450px;
-    min-height: 300px; /* ✅ ajoute cette ligne */
+    background-color: #ffffff; /* Fond blanc identique à la colonne gauche */
+    padding: 30px; /* Padding uniforme */
+    border-radius: 12px; /* Coins arrondis pour l’aspect visuel */
+    box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.1); /* Ombre douce pour la carte */
+    flex: 1; /* Partage l’espace avec la colonne gauche */
+    min-width: 450px; /* Assure une largeur minimale confortable */
+    min-height: 300px; /* Force une hauteur minimale pour garder un format équilibré même s’il y a peu de contenu */
 }
 
 /* --- CONTENEUR DES BOUTONS PATIENT --- */
 .patient-buttons-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 15px; /* ✅ espace entre les deux boutons */
+    display: flex; /* Utilise Flexbox pour organiser les boutons */
+    flex-direction: column; /* Aligne les boutons verticalement (un en dessous de l’autre) */
+    align-items: center; /* Centre horizontalement chaque bouton dans le conteneur */
+    gap: 15px; /* Espace vertical de 15px entre chaque bouton */
 }
 
 /* --- FORMULAIRES --- */
 form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+    display: flex; /* Active Flexbox sur les éléments du formulaire */
+    flex-direction: column; /* Dispose les champs verticalement */
+    gap: 15px; /* Espace vertical de 15px entre chaque champ */
 }
 
 /* --- LABELS --- */
 label {
-    font-weight: bold;
-    margin-bottom: 5px;
+    font-weight: bold; /* Met les textes de label en gras pour les distinguer */
+    margin-bottom: 5px; /* Espace entre le label et le champ associé */
 }
 
 /* --- INPUTS, SELECTS, TEXTAREAS --- */
-/* --- INPUTS, SELECTS, TEXTAREAS --- */
-input[type="text"],
-input[type="date"],
-input[type="number"],
-select,
+input[type="text"],        /* Cible tous les champs de formulaire de type texte (ex. pour nom, opérateur, pathologie) */
+input[type="date"],        /* Cible tous les champs de type date (ex. pour la date de naissance) */
+input[type="number"],      /* Cible tous les champs numériques (ex. pour poids, taille, âge) */
+select,                    /* Cible tous les menus déroulants (ex. pour sexe, doigt, phalange) */
 textarea {
-    padding: 12px 16px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    background-color: #ffffff;
-    font-size: 16px;
-    width: 100%;
-    box-sizing: border-box;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.06);
-    transition: box-shadow 0.3s ease, border-color 0.3s ease;
+    padding: 12px 16px; /* Espace intérieur du champ : 12px verticalement, 16px horizontalement */
+    border: 1px solid #ccc; /* Bordure gris clair */
+    border-radius: 8px; /* Coins arrondis pour un aspect moderne et doux */
+    background-color: #ffffff; /* Fond blanc uniforme */
+    font-size: 16px; /* Taille du texte du champ */
+    width: 100%; /* Le champ s’étale sur toute la largeur de son conteneur */
+    box-sizing: border-box; /* Inclut padding et border dans les dimensions du champ */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.06); /* Petite ombre interne pour donner du relief */
+    transition: box-shadow 0.3s ease, border-color 0.3s ease; /* Animation fluide au survol ou focus */
 }
-
-input[type="text"]:focus,
-input[type="date"]:focus,
-input[type="number"]:focus,
-select:focus,
+/* --- CHAMPS DE FORMULAIRE : STYLE AU FOCUS (lorsqu'on clique dedans) --- */
+input[type="text"]:focus,        /* Applique le style quand un champ de texte (nom, opérateur, etc.) est activement sélectionné */
+input[type="date"]:focus,        /* Applique le style quand un champ de date (comme la date de naissance) est en cours d’édition */
+input[type="number"]:focus,      /* Applique le style quand un champ numérique (poids, taille, etc.) est en focus */
+select:focus,                    /* Applique le style quand un menu déroulant (sexe, doigt, phalange) est activé ou survolé */
 textarea:focus {
-    outline: none;
-    border-color: #66afe9;
-    box-shadow: 0 0 8px rgba(102, 175, 233, 0.6);
+    outline: none; /* Supprime le contour bleu par défaut du navigateur */
+    border-color: #66afe9; /* Change la couleur de la bordure pour un bleu clair lors du focus */
+    box-shadow: 0 0 8px rgba(102, 175, 233, 0.6); /* Ajoute une ombre bleutée autour du champ pour effet visuel */
 }
 
-
-/* --- BOUTONS --- */
+/* --- BOUTONS GÉNÉRAUX (boutons et boutons de type submit) --- */
 button, input[type="submit"] {
-    padding: 12px;
-    background-color: #28a745;
-    color: white;
-    font-size: 16px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.3s ease;
+    padding: 12px; /* Ajoute de l’espace intérieur pour un meilleur confort visuel */
+    background-color: #28a745; /* Fond vert pour indiquer une action principale */
+    color: white; /* Texte blanc pour bon contraste */
+    font-size: 16px; /* Taille lisible pour le texte du bouton */
+    border: none; /* Supprime les bordures par défaut */
+    border-radius: 8px; /* Coins arrondis pour style moderne */
+    cursor: pointer; /* Change le curseur en main au survol */
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Animation douce pour couleur et effet scale */
 }
 
 button:hover, input[type="submit"]:hover {
-    background-color: #218838;
-    transform: scale(1.05);
+    background-color: #218838; /* Fond vert plus foncé au survol */
+    transform: scale(1.05); /* Agrandit légèrement le bouton pour retour visuel */
 }
 
-/* --- BOUTONS CRÉER / CHARGER --- */
+/* --- BOUTON "CRÉER UNE NOUVELLE FICHE" --- */
 .button-create {
-    background-color: #007bff;
-    margin-bottom: 10px;
+    background-color: #007bff; /* Bleu vif pour différencier l’action de création */
+    margin-bottom: 10px; /* Espace sous le bouton */
 }
 .button-create:hover {
-    background-color: #0056b3;
+    background-color: #0056b3; /* Bleu plus foncé au survol */
 }
 
+/* --- BOUTON "CHARGER UNE FICHE" --- */
 .button-load {
-    background-color: #28a745;
-    margin-top: 10px; /* ✅ ajoute cette ligne */
+    background-color: #28a745; /* Même vert que les autres boutons d’action */
+    margin-top: 10px; /* Espace au-dessus du bouton */
 }
 .button-load:hover {
-    background-color: #1e7e34;
-    margin-top: 10px; /* ✅ ajoute cette ligne */
+    background-color: #1e7e34; /* Vert plus foncé au survol */
+    margin-top: 10px; /* Reprend l’espacement même au hover pour éviter un saut visuel */
 }
 
-/* --- FORMULAIRES PATIENT MASQUÉS --- */
+/* --- FORMULAIRE DE CRÉATION PATIENT (bouton à l’intérieur) --- */
 #createPatientForm button {
-    margin-top: 20px;     /* ✅ Espace au-dessus du bouton */
-    align-self: center;   /* ✅ Centre horizontalement dans le formulaire */
-    width: fit-content;   /* ✅ Réduit la largeur au contenu */
+    margin-top: 20px;     /* Espace vertical entre les champs et le bouton */
+    align-self: center;   /* Centre le bouton horizontalement dans le formulaire */
+    width: fit-content;   /* La largeur du bouton s’ajuste à son contenu uniquement */
 }
 
+/* --- STRUCTURE DU FORMULAIRE DE CRÉATION --- */
 #createPatientForm {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+    display: flex; /* Utilise Flexbox pour l’agencement des champs */
+    flex-direction: column; /* Empile les champs verticalement */
+    gap: 15px; /* Espace vertical uniforme entre chaque champ */
 }
 
-
+/* --- FORMULAIRES CACHÉS PAR DÉFAUT (création, prévisualisation) --- */
 #loadPatientForm,
 #patientPreview {
-    margin-top: 25px;
-    display: none;
+    margin-top: 25px; /* Ajoute de l’espace vertical au-dessus de la section */
+    display: none; /* Caché au chargement de la page (affiché dynamiquement en JS) */
 }
 
+/* --- CLASSE ACTIVE : rend visible un élément masqué et ajoute une animation --- */
 .active {
-    display: block !important;
-    animation: fadeIn 0.5s ease;
+    display: block !important; /* Force l’affichage de l’élément même s’il est en display:none ailleurs */
+    animation: fadeIn 0.5s ease; /* Applique une animation d’apparition douce */
 }
-/* --- APERÇU DU PATIENT --- */
+
+/* --- BLOC D’APERÇU DU PATIENT SÉLECTIONNÉ --- */
 #patientPreview {
-    background-color: #f9f9f9;
-    padding: 20px;
-    border-radius: 10px;
-    border: 1px solid #dddddd;
+    background-color: #f9f9f9; /* Fond gris très clair pour différencier du reste de la page */
+    padding: 20px; /* Espace intérieur autour du contenu */
+    border-radius: 10px; /* Coins arrondis pour un look plus agréable */
+    border: 1px solid #dddddd; /* Bordure grise légère */
 }
 
+/* --- STYLE DU TEXTE DANS L’APERÇU --- */
 #patientPreview p {
-    margin: 5px 0;
-    font-size: 15px;
-    color: #555555;
+    margin: 5px 0; /* Petit espacement vertical entre les lignes */
+    font-size: 15px; /* Taille de texte légèrement réduite */
+    color: #555555; /* Texte gris moyen (moins intense que noir) */
 }
 
-/* --- LISTE DÉROULANTE PATIENTS --- */
+/* --- LISTE DÉROULANTE POUR LES FICHES PATIENTS --- */
 #patientFile {
-    width: 100%;
-    padding: 12px;
-    font-size: 16px;
-    border-radius: 8px;
-    border: 1px solid #cccccc;
-    background-color: #ffffff;
-    transition: box-shadow 0.3s ease, background-color 0.3s ease;
+    width: 100%; /* Prend toute la largeur disponible dans son conteneur */
+    padding: 12px; /* Espace intérieur homogène */
+    font-size: 16px; /* Taille de police lisible */
+    border-radius: 8px; /* Coins arrondis pour cohérence visuelle */
+    border: 1px solid #cccccc; /* Bordure grise standard */
+    background-color: #ffffff; /* Fond blanc */
+    transition: box-shadow 0.3s ease, background-color 0.3s ease; /* Animation douce au survol */
 }
 
 #patientFile:hover {
-    background-color: #f0f8ff;
-    box-shadow: 0 0 12px rgba(0, 123, 255, 0.3);
+    background-color: #f0f8ff; /* Légère coloration bleue au survol */
+    box-shadow: 0 0 12px rgba(0, 123, 255, 0.3); /* Effet lumineux autour du champ au survol */
 }
 
-/* --- ANIMATION APPARITION --- */
+/* --- ANIMATION FADE-IN POUR RENDRE L’APPARITION FLUIDE --- */
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to   { opacity: 1; transform: translateY(0); }
+    from { 
+        opacity: 0; /* Commence invisible */
+        transform: translateY(-10px); /* Légèrement décalé vers le haut */
+    }
+    to {
+        opacity: 1; /* Devient totalement visible */
+        transform: translateY(0); /* Reprend sa position d’origine */
+    }
 }

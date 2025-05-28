@@ -1,50 +1,88 @@
 {% set no_card = True %}
+<!-- Définition d'une variable Jinja2 appelée "no_card" avec la valeur True -->
+<!-- Utilisée dans base.html pour conditionner l'affichage ou non d'une carte visuelle -->
 
 {% extends "base.html" %}
+<!-- Indique que ce template hérite de la structure de base.html (mise en page générale) -->
 
 {% block title %}Accueil - Dispositif de mesure{% endblock %}
+<!-- Bloc pour définir dynamiquement le titre de la page (affiché dans l'onglet du navigateur) -->
 
 {% block head %}
+<!-- Bloc permettant d'ajouter des ressources spécifiques à cette page dans le <head> du template parent -->
+
 <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+<!-- Lien vers une feuille de style CSS spécifique à cette page -->
+<!-- rel="stylesheet" : Indique qu'il s'agit d'une feuille de style -->
+<!-- href : Définit le chemin du fichier CSS -->
+<!-- {{ url_for(...) }} : Syntaxe Jinja2 qui génère dynamiquement l'URL en fonction du chemin statique -->
+
 <script src="{{ url_for('static', filename='js/index.js') }}" defer></script>
+<!-- Lien vers un script JavaScript spécifique à cette page -->
+<!-- src : Indique l'URL du fichier JavaScript -->
+<!-- defer : Attribut HTML qui permet de différer l'exécution du script jusqu'à ce que le DOM soit entièrement chargé -->
+
 {% endblock %}
 
 {% block content %}
+<!-- Bloc principal de contenu de la page. C'est ici que s'affiche le contenu propre à "index.html" -->
 
 <!-- ✅ SECTION TITRE Bien séparé du reste -->
 <div class="header-container">
+    <!-- Conteneur pour le titre principal de la page -->
+    <!-- class="header-container" : Permet d'appliquer un style CSS spécifique à cette section -->
     <h1>Bienvenue sur l'interface du dispositif médical</h1>
 </div>
 
 <!-- ✅ SECTION PRINCIPALE en 2 colonnes bien alignées -->
 <div class="main-container">
+    <!-- Conteneur principal divisant la page en deux colonnes (gauche et droite) -->
 
-    <!-- Zone gauche : Formulaire mesure -->
     <div class="left-container">
+        <!-- Colonne gauche dédiée au formulaire de mesure -->
         {% include "components/measure_form.html" %}
+        <!-- Inclusion d’un fichier HTML externe contenant le formulaire de mesure -->
     </div>
 
     <!-- Zone droite : Fiches patient -->
     <div class="right-container">
 
         {% include "components/patient_buttons.html" %}
-
+        <!-- Inclusion d’un fichier externe qui contient des boutons pour interagir avec les fiches patient -->
 
         <!-- ✅ FORMULAIRE DE MODIFICATION D'UNE FICHE EXISTANTE -->
         <div id="editPatientForm" style="display: none; margin-top: 25px;">
+            <!-- Conteneur du formulaire de modification, caché par défaut -->
+            <!-- id="editPatientForm" : Identifiant unique utilisé en JavaScript pour afficher ou cacher cette section -->
+            <!-- style="display: none;" : Ce formulaire est caché à l'affichage initial -->
             <h2>Modifier une fiche existante</h2>
+            <!-- <h2> : Balise HTML pour un sous-titre -->
 
             <label for="editPatientSelect">Sélectionner un patient :</label>
+            <!-- Étiquette liée à l'élément <select> grâce à l'attribut for -->
+
             <select id="editPatientSelect" onchange="onSelectPatientToEdit()">
-                <!-- Options générées dynamiquement par JavaScript -->
+                <!-- Liste déroulante pour choisir un patient existant -->
+                <!-- id : Identifiant utilisé par le JavaScript -->
+                <!-- onchange : Déclenche une fonction JavaScript quand une option est sélectionnée -->
+                <!-- Les options seront insérées dynamiquement par le script index.js -->
             </select>
         </div>
 
         {% include "components/create_patient_form.html" %}
+        <!-- Inclusion du formulaire pour créer une nouvelle fiche patient -->
+
         {% include "components/load_patient_form.html" %}
+        <!-- Inclusion du formulaire pour charger une fiche existante -->
 
         <div id="patientPreview" style="display: none;">
+        <!-- Zone de prévisualisation des informations du patient sélectionné -->
+        <!-- id="patientPreview" : Identifiant unique utilisé par JavaScript -->
+        <!-- style="display: none;" : Masqué par défaut, s'affiche lorsqu'un patient est sélectionné -->
+
             <h3>Informations du patient sélectionné</h3>
+            <!-- <h3> : Titre de niveau 3 pour introduire la section de prévisualisation -->
+
             <p><strong>Nom du patient :</strong> <span id="previewName"></span></p>
             <p><strong>Date de naissance :</strong> <span id="previewBirthdate"></span></p>
             <p><strong>Âge :</strong> <span id="previewAge"></span></p>
@@ -53,6 +91,10 @@
             <p><strong>Sexe :</strong> <span id="previewSex"></span></p>
             <p><strong>Pathologie :</strong> <span id="previewPathology"></span></p>
             <p><strong>Notes :</strong> <span id="previewNotes"></span></p>
+            <!-- Toutes ces balises <span> sont mises à jour via JavaScript pour afficher les données du patient sélectionné -->
+            <!-- L'utilisation de paragraphe <p> pour chaque champ garantit une séparation visuelle propre -->
+            <!-- <strong> :  est utilisé pour mettre en gras le titre le label statique-->
+            <!--les <span>  sont vides au début, mais le JavaScript va les remplir automatiquement (par exemple avec le nom du patient) quand l’utilisateur choisit une fiche.-->
         </div>
 
     </div>

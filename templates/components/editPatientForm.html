@@ -1,31 +1,98 @@
 <!-- SECTION D'ÉDITION DES PATIENTS -->
 <div id="editPatientSection" style="display: none; flex-direction: column; gap: 20px;">
+<!-- id="editPatientSection" : identifiant unique utilisé pour cibler l’ensemble de la zone d’édition via JavaScript -->
+<!-- style="display: none;" : signifie que la section est initialement masquée à l’affichage ; elle sera affichée dynamiquement en JS -->
+<!-- flex-direction: column : les enfants de ce conteneur seront empilés verticalement (colonne) -->
+<!-- gap: 20px : ajoute un espacement vertical de 20 pixels entre chaque élément enfant -->
 
     <!-- 1. Liste déroulante pour choisir un patient -->
     <div id="editPatientForm">
+    <!-- Conteneur de la liste déroulante permettant de choisir un patient à modifier -->
+    <!-- id="editPatientForm" : identifiant spécifique pour cibler cette partie dans le DOM -->
+
         <label for="editPatientSelect">Choisir un patient :</label>
+        <!-- <label> : texte descriptif lié au champ de sélection <select> -->
+        <!-- for="editPatientSelect" : relie ce label au champ ayant l'id correspondant pour l’accessibilité (navigateur, lecteur d’écran) -->
+
         <select id="editPatientSelect" onchange="onSelectPatientToEdit()">
+        <!-- <select> : menu déroulant permettant de sélectionner une valeur parmi une liste d’options -->
+        <!-- id="editPatientSelect" : identifiant permettant à JavaScript de manipuler cette liste -->
+        <!-- onchange="onSelectPatientToEdit()" : déclenche une fonction JS dès qu’un utilisateur choisit un élément dans la liste -->
+
+
             <option value="">-- Choisir un patient --</option>
+            <!-- Première option par défaut, texte d'instruction -->
+            <!-- value="" : valeur vide, utile pour forcer une sélection active par l'utilisateur -->
+            <!-- Peut être utilisée pour valider que l’utilisateur a bien sélectionné un patient -->
+
             <!-- Les options seront injectées ici -->
+            <!-- JavaScript ajoutera dynamiquement les options disponibles (liste de patients) dans cette balise -->
         </select>
     </div>
 
     <!-- 2. Formulaire pour éditer (réutilise createPatientForm) -->
     <div id="createPatientForm" style="display: none; flex-direction: column;">
+    <!-- Conteneur du formulaire de modification des informations du patient -->
+    <!-- id="createPatientForm" : même identifiant que pour la création — permet la réutilisation du même formulaire HTML pour édition -->
+    <!-- style="display: none;" : le formulaire est masqué par défaut, il s’affiche après sélection d’un patient -->
+    <!-- flex-direction: column : organise tous les champs verticalement (1 par ligne) -->
+
         <h2 id="formTitle">Modifier la fiche du patient</h2>
+        <!-- Titre principal de cette section du formulaire -->
+        <!-- id="formTitle" : identifiant utilisé par JS pour potentiellement modifier le texte (ex. "Créer" ↔ "Modifier") -->
 
         <!-- Ton formulaire ici (nom, naissance, poids, taille, etc.) -->
+
         <input id="patient_name" type="text" placeholder="Nom du patient">
+        <!-- <input> : champ de saisie textuelle pour modifier le nom du patient -->
+        <!-- id="patient_name" : identifiant utilisé pour remplir ou lire cette valeur via JS -->
+        <!-- type="text" : attend une saisie alphanumérique -->
+        <!-- placeholder : texte grisé par défaut, donne une indication à l’utilisateur -->
+
         <input id="birthdate" type="date">
+        <!-- Champ de sélection de la date de naissance -->
+        <!-- id="birthdate" : utilisé pour accéder/modifier la valeur depuis le script -->
+        <!-- type="date" : interface native avec calendrier selon le navigateur -->
+
         <input id="age" type="number" style="display: none;">
+        <!-- Champ numérique masqué (non affiché à l’utilisateur) pour stocker l’âge -->
+        <!-- id="age" : peut être utilisé côté JS pour un calcul ou traitement -->
+        <!-- type="number" : attend un nombre entier -->
+        <!-- style="display: none;" : non visible à l’écran -->
+
         <div id="ageDisplay" style="display: none;"></div>
+        <!-- Conteneur (div) servant à afficher dynamiquement l’âge du patient de manière plus lisible -->
+        <!-- id="ageDisplay" : utilisé pour insérer du texte via JS (ex: "43 ans") -->
+        <!-- style="display: none;" : masqué par défaut, potentiellement affiché après calcul -->
+
         <input id="weight" type="number" placeholder="Poids">
+        <!-- Champ numérique pour saisir le poids du patient -->
+        <!-- id="weight" : utilisé pour récupérer la valeur côté JS -->
+        <!-- type="number" : empêche la saisie de texte -->
+        <!-- placeholder="Poids" : donne une indication de la nature du champ -->
+
         <input id="height" type="number" placeholder="Taille">
+        <!-- Champ numérique pour saisir la taille en cm -->
+        <!-- Même logique que ci-dessus avec un autre identifiant -->
+
         <input id="sex" type="text" placeholder="Sexe">
+        <!-- Champ texte libre pour entrer le sexe du patient -->
+        <!-- Dans un contexte plus robuste, cela pourrait être un <select> comme dans le formulaire de création -->
+
         <input id="pathology" type="text" placeholder="Pathologie">
+        <!-- Champ pour indiquer la pathologie (libellé libre) -->
+
         <textarea id="notes" placeholder="Notes"></textarea>
+        <!-- Champ de texte multiligne pour les remarques supplémentaires -->
+        <!-- id="notes" : identifiant manipulable en JS -->
+        <!-- placeholder : texte d’aide affiché tant que le champ est vide -->
+        <!-- textarea permet à l’utilisateur d’entrer un texte plus long que dans un input simple -->
 
         <button onclick="savePatient()">Enregistrer</button>
+        <!-- Bouton permettant de sauvegarder les données modifiées -->
+        <!-- onclick="savePatient()" : déclenche une fonction JS qui envoie les modifications au backend -->
+        <!-- Pas de type="submit" ici, donc c’est un bouton géré exclusivement en JavaScript -->
     </div>
+
 
 </div>

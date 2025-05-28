@@ -1,33 +1,100 @@
-<!-- Formulaire pour créer une fiche patient -->
+<!-- Conteneur principal du formulaire de création d'une fiche patient -->
 <div id="createPatientForm" data-mode="create" style="margin-bottom: 20px;">
+<!-- id="createPatientForm" : identifiant unique pour manipuler ce formulaire via JavaScript -->
+<!-- data-mode="create" : attribut HTML5 personnalisé pour indiquer que le formulaire est en mode "création" (vs édition) -->
+<!-- style="margin-bottom: 20px;" : ajoute un espacement de 20 pixels en bas du formulaire pour éviter qu'il ne colle aux autres éléments -->
+
     <h2 id="formTitle">Créer une nouvelle fiche patient</h2>
+    <!-- <h2> : titre de niveau 2 indiquant la section principale du formulaire -->
+    <!-- id="formTitle" : permet à un script JavaScript de modifier dynamiquement le titre (ex: "Modifier une fiche patient") -->
+
     <label>Nom :</label>
+    <!-- <label> : étiquette associée à l'élément affichant le nom du patient (ici pas d'attribut for car pas de champ de saisie directe) -->
+
     <p id="display_patient_name" style="font-weight: bold; padding: 10px 0;">–</p>
+    <!-- <p> : paragraphe affichant dynamiquement le nom du patient (ex: extrait d'une fiche existante ou rempli automatiquement) -->
+    <!-- id="display_patient_name" : utilisé par JavaScript pour insérer dynamiquement le nom dans ce bloc -->
+    <!-- style="font-weight: bold;" : met le texte en gras -->
+    <!-- padding: 10px 0 : ajoute 10 pixels d’espace en haut et en bas pour une meilleure lisibilité -->
 
     <label for="birthdate">Date de naissance :</label>
+    <!-- <label for="birthdate"> : relie l'étiquette au champ de saisie de la date grâce à l'id correspondant -->
+
     <input type="date" id="birthdate" name="birthdate">
+    <!-- <input> : champ de formulaire permettant de sélectionner une date via un calendrier natif -->
+    <!-- type="date" : affiche une interface de calendrier spécifique -->
+    <!-- id="birthdate" : identifiant utilisé pour relier le champ à son label et le manipuler en JavaScript -->
+    <!-- name="birthdate" : nom du champ envoyé au backend lors de la sauvegarde -->
 
     <label>Âge :</label>
+    <!-- Affiche un label descriptif pour la valeur de l’âge calculé (champ non modifiable par l’utilisateur) -->
+
     <p id="ageDisplay" style="font-weight: bold; padding: 10px 0;">–</p>
-    
+    <!-- <p> : affiche dynamiquement l’âge calculé à partir de la date de naissance sélectionnée -->
+    <!-- id="ageDisplay" : cible manipulée par JavaScript pour insérer l’âge calculé -->
+    <!-- style : ajoute du gras et un espace vertical de 10 pixels en haut/bas -->
+
     <label for="weight">Poids (kg) :</label>
+    <!-- <label for="weight"> : relie l’étiquette au champ correspondant pour améliorer l’accessibilité -->
+
     <input type="number" id="weight" name="weight">
+    <!-- <input> : champ permettant de saisir une valeur numérique pour le poids -->
+    <!-- type="number" : limite les entrées aux nombres uniquement -->
+    <!-- id="weight" : utilisé en JavaScript pour accéder à la valeur saisie -->
+    <!-- name="weight" : utilisé pour l’envoi du formulaire au backend -->
 
     <label for="height">Taille (cm) :</label>
+    <!-- <label for="height"> : label lié à la saisie de la taille du patient -->
+
     <input type="number" id="height" name="height">
+    <!-- <input> : champ de type numérique pour entrer la taille en centimètres -->
+    <!-- type="number" : force la saisie numérique uniquement -->
+    <!-- id="height" : identifiant utilisé dans le DOM ou en JavaScript -->
+    <!-- name="height" : nom du champ lors de l’envoi du formulaire -->
 
     <label for="sex">Sexe :</label>
+    <!-- Label lié à la liste déroulante de sélection du sexe -->
+
     <select id="sex" name="sex">
+        <!-- <select> : menu déroulant permettant de choisir une option prédéfinie -->
+        <!-- id="sex" : identifiant unique pour relier le label et pour usage JavaScript -->
+        <!-- name="sex" : nom du champ envoyé avec le formulaire -->
+
         <option value="M">Homme</option>
+        <!-- <option> : une des valeurs sélectionnables dans le champ -->
+        <!-- value="M" : valeur transmise au backend si sélectionnée -->
+        <!-- Affiche "Homme" dans l’interface utilisateur -->
+
         <option value="F">Femme</option>
+        <!-- value="F" : identifie la valeur sélectionnée comme étant "Femme" -->
+
         <option value="Autre">Autre</option>
+        <!-- value="Autre" : valeur alternative pour les cas ne correspondant pas aux choix binaires -->
+
     </select>
 
     <label for="pathology">Pathologie :</label>
+    <!-- <label for="pathology"> : label lié au champ texte décrivant la pathologie du patient -->
+
     <input type="text" id="pathology" name="pathology">
+    <!-- <input type="text"> : champ de saisie libre pour entrer la pathologie -->
+    <!-- id="pathology" : identifiant permettant de récupérer ou préremplir la valeur -->
+    <!-- name="pathology" : utilisé pour envoyer la pathologie avec le formulaire -->
 
     <label for="notes">Notes :</label>
+    <!-- Label associé au champ de texte libre servant à ajouter des remarques cliniques -->
+
     <textarea id="notes" name="notes" rows="3" placeholder="Antécédents, allergies, remarques..."></textarea>
+    <!-- <textarea> : champ multiligne pour les textes longs -->
+    <!-- id="notes" : identifiant manipulable en JavaScript -->
+    <!-- name="notes" : clé de la donnée envoyée au backend -->
+    <!-- rows="3" : hauteur initiale du champ (3 lignes visibles) -->
+    <!-- placeholder : texte d’aide affiché quand le champ est vide -->
 
     <button type="button" onclick="savePatient()">✅ Enregistrer la fiche</button>
+    <!-- <button> : bouton cliquable qui déclenche une action -->
+    <!-- type="button" : empêche l’envoi automatique du formulaire (pas un submit classique) -->
+    <!-- onclick="savePatient()" : appelle une fonction JavaScript (non incluse ici) pour valider et sauvegarder les données -->
+    <!-- Le texte du bouton inclut une icône visuelle ✅ et un libellé explicite -->
+
 </div>

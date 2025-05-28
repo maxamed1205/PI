@@ -1,116 +1,150 @@
 {% extends "base.html" %}
-{# Indique que ce fichier utilise base.html comme structure principale (heritage de template) #}
+<!-- Indique que ce template utilise le fichier "base.html" comme base structurelle -->
+<!-- Cela permet de réutiliser l'en-tête HTML, le logo, les blocs communs et de ne définir ici que le contenu spécifique à la page de mesure -->
 
-{% block title %}Mesure de Force en Temps Reel{% endblock %}
-{# Definis le titre de la page qui sera affiche dans l'onglet du navigateur #}
+{% block title %}Mesure de Force et d'angle en Temps Reel{% endblock %}
+<!-- Bloc permettant de définir dynamiquement le titre affiché dans l'onglet du navigateur -->
+<!-- Ici, on écrase le titre par défaut du template "base.html" pour l'adapter à la page de mesure -->
 
 {% block head %}
 {# Debut du bloc head pour ajouter des fichiers CSS specifiques a cette page #}
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/measurement.css') }}">
-    {# Import du fichier CSS specifiquement pour la page de mesure #}
+    <!-- Lien vers une feuille de style CSS spécifique à cette page -->
+    <!-- rel="stylesheet" : Indique qu'il s'agit d'un fichier CSS -->
+    <!-- href : Définit le chemin vers ce fichier CSS -->
+    <!-- {{ url_for(...) }} : Génère dynamiquement l'URL absolue en fonction du nom du fichier (ici : static/css/measurement.css) -->
 
 {% endblock %}
 
 {% block content %}
-{# Debut de la partie principale du contenu specifique a cette page #}
+<!-- Bloc principal du corps de la page : tout ce qui s'affichera à l'intérieur du <main> de base.html -->
 
 <!-- Texte patient en haut -->
 <div class="info">
-    {# Conteneur qui affiche les informations du patient sous forme de texte centre #}
+<!-- Conteneur textuel affichant les informations liées au patient actuellement sélectionné -->
+<!-- class="info" : Sert à appliquer un style CSS pour l'apparence de cette zone -->
+
     Patient : <span class="highlight">{{ patient.patient_name }}</span> |
-    {# Affiche le nom du patient (variable injectee par le serveur) avec une mise en forme speciale #}
+    <!-- Affiche le nom du patient en gras ou en surbrillance grâce à la classe "highlight" -->
+    <!-- {{ patient.patient_name }} : Valeur dynamique injectée côté serveur par Jinja2 -->
+
     Doigt : <span class="highlight">{{ patient.finger }}</span> |
-    {# Affiche le doigt mesure (exemple : index, majeur) #}
+    <!-- Affiche le doigt mesuré (index, majeur...) -->
+
     Phalange : <span class="highlight">{{ patient.phalange }}</span> |
-    {# Affiche la partie du doigt mesuree (exemple : proximale, intermediaire) #}
+     <!-- Affiche la section du doigt mesurée (ex. proximale, distale...) -->
+
     Operateur : <span class="highlight">{{ patient.operator }}</span>
-    {# Affiche le nom de la personne qui realise la mesure #}
+    <!-- Affiche le nom de l’opérateur ayant effectué la mesure -->
 </div>
 
 <!-- Bouton Sauvegarder -->
 <div class="save-button-container">
-    {# Conteneur pour centrer le bouton de sauvegarde #}
+    <!-- Conteneur pour centrer ou styliser le bouton "Sauvegarder les données" -->
     <button id="saveButton">Sauvegarder les donnees</button>
-    {# Bouton qui permettra d'envoyer les donnees en appuyant dessus #}
+    <!-- <button> : Élément HTML interactif permettant de déclencher une action (ici : enregistrer les données) -->
+    <!-- id="saveButton" : Identifiant utilisé par JavaScript pour attacher un événement onclick -->
+
 </div>
 
 <!-- Nouveau graphique : Force en fonction de l'angle libre -->
 <div id="phalange-force-container">
+    <!-- Conteneur pour afficher un graphique croisant la force mesurée et l'angle (dans le plan libre, pas contraint) -->
+
     <h2 style="text-align: center;">Force en fonction de l'angle mesuré (libre)</h2>
+    <!-- Titre du graphique centré horizontalement -->
+
     <div id="graph-force-vs-angle"></div>
+    <!-- Zone vide (conteneur) destinée à recevoir un graphique généré dynamiquement par JavaScript (Plotly.js) -->
 </div>
 
 <!-- Bloc principal qui contient graphiques + bouton -->
 <div id="measurement-page">
-    {# Conteneur principal de toute la zone de mesure (graphes + bouton) #}
+    <!-- Conteneur global regroupant tous les graphes, boutons, interactions de la page de mesure -->
 
 
     <div id="graphs-container">
-
-        {# Conteneur qui regroupe les deux panneaux de graphiques (force et amplitude) #}
+    <!-- Sous-bloc contenant les graphes de force et d'angle, organisés en deux panneaux (gauche/droite) -->
 
         <div id="left-panel">
-            {# Panneau de gauche reserve au graphe de la force #}
+        <!-- Panneau gauche : affichera le graphe de la force en fonction du temps -->
             <h2>Force en fonction du temps</h2>
-            {# Titre pour le panneau de force #}
+            <!-- <h2> : Balise HTML pour sous-titre de la force en fonction du temps -->
             <div id="graph-force"></div>
-            {# Zone vide qui recevra le graphe de la force (remplie par JavaScript) #}
+            <!-- Zone vide à remplir dynamiquement avec un graphique via JavaScript -->
         </div>
 
         <div id="separator"></div>
         {# Petite barre verticale qui separe le panneau gauche du panneau droit #}
+        <!-- Séparateur visuel vertical entre les deux panneaux -->
 
         <div id="right-panel">
-            {# Panneau de droite reserve au graphe d'amplitude (angle) #}
+            <!-- Panneau droit : affichera le graphe de l'amplitude articulaire (angle) dans le temps -->
             <h2>Amplitude en fonction du temps</h2>
             
             <div id="angle-values" style="text-align: center; margin-bottom: 10px;">
-                <strong>Angle distal :</strong> <span id="angle-distal">–</span> °
+             <!-- Affiche les deux valeurs d'angle actuelles (proximal et distal) en haut du graphique -->
+            <strong>Angle distal :</strong> <span id="angle-distal">–</span> °
+            <!-- <strong> : Label statique en gras -->
+            <!-- <span> : Valeur dynamique qui sera mise à jour via JavaScript (ex : 35.2°) -->
+
                 &nbsp;&nbsp;&nbsp;
+                <!-- Espacement horizontal visuel entre les deux valeurs -->
                 <strong>Angle proximal :</strong> <span id="angle-proximal">–</span> °
+                <!-- Même principe que ci-dessus mais pour l'autre articulation -->
             </div>
 
             {# Titre pour le panneau d'amplitude #}
             <div id="graph-amplitude"></div>
-            {# Zone vide qui recevra le graphe d'amplitude (remplie par JavaScript) #}
+            <!-- Conteneur vide qui recevra dynamiquement le graphique d'angle vs. temps via JavaScript -->
         </div>
     </div>
 
     <!-- Bouton Afficher / Cacher les graphiques -->
     <div style="text-align: center; margin-top: 10px;">
         <button id="toggleGraphsButton">Cacher les graphiques</button>
+        <!-- Permet d'afficher ou de masquer dynamiquement les graphes avec un effet JavaScript -->
     </div>
 
 
     <div class="new-measure-container">
+        <!-- Conteneur centré pour afficher le bouton "Nouvelle mesure" -->
         {# Conteneur pour centrer le bouton Nouvelle mesure sous les graphes #}
         <button id="newMeasureButton">Nouvelle mesure</button>
-        {# Bouton qui permet de retourner a l'accueil pour lancer une nouvelle mesure #}
+         <!-- Ce bouton redirige l'utilisateur vers la page d'accueil  -->
     </div>
 
 </div>
 
 {% endblock %}
-{# Fin du bloc de contenu principal de la page de mesure #}
+<!-- Fin du bloc principal de contenu propre à la page de mesure -->
 
 {% block scripts %}
-{# Debut du bloc scripts pour ajouter des fichiers JavaScript specifiques a cette page #}
-
+<!-- Bloc d’inclusion des scripts spécifiques à cette page (JS externes, bibliothèques CDN, etc.) -->
     <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
-    {# Importe la librairie Socket.IO pour permettre la communication en temps reel avec le serveur #}
+    <!-- Charge la bibliothèque Socket.IO (version CDN) -->
+    <!-- Utilisée pour établir une connexion en temps réel (WebSocket) entre le navigateur et le serveur Python/Flask -->
+
 
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    {# Importe la librairie Plotly pour dessiner les graphes de force et amplitude #}
+    <!-- Charge la bibliothèque Plotly.js permettant de dessiner des graphiques interactifs (ex : force, amplitude) -->
 
     <script>
+        window.DEBUG = true;  // Activer ou désactiver tous les logs
         window.blockedPhalange = "{{ patient.phalange|lower }}";
-        console.log("📦 Phalange bloquée (depuis Jinja):", window.blockedPhalange);
+        <!-- Injecte la phalange actuelle dans une variable JavaScript globale accessible dans measurement.js -->
+        if (window.DEBUG) {
+            console.log("📦 Phalange bloquée (depuis Jinja):", window.blockedPhalange);
+            // <!-- Affiche la valeur dans la console pour vérification/debug -->
+        }
     </script>
 
     <script src="{{ url_for('static', filename='js/measurement.js') }}"></script>
-    {# Importe ton fichier JavaScript personnel measurement.js qui gere les mesures #}
+    <!-- Fichier JavaScript principal de la page, gère l'affichage, les événements et les interactions dynamiques -->
+    <!-- url_for(...) : Permet de pointer dynamiquement vers ce fichier dans le dossier static/js -->
+
 
 {% endblock %}
-{# Fin du bloc scripts #}
+<!-- Fin du bloc des scripts propres à cette page -->
 

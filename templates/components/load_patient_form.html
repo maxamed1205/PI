@@ -1,9 +1,32 @@
 <!-- Menu déroulant pour charger une fiche existante -->
 <div id="loadPatientForm" class="" style="margin-bottom: 20px;">
+<!-- <div> : conteneur principal du bloc de chargement -->
+<!-- id="loadPatientForm" : identifiant utilisé pour manipuler ou cibler cette zone via JavaScript -->
+<!-- class="" : aucune classe CSS assignée ici, mais l’attribut est prêt pour des styles futurs -->
+<!-- style="margin-bottom: 20px;" : ajoute un espace de 20px sous le bloc pour éviter qu’il ne touche les éléments suivants -->
+
     <h2>Charger un patient existant</h2>
+    <!-- <h2> : titre de niveau 2 indiquant le but de cette section -->
+    <!-- Permet à l’utilisateur de comprendre qu’il peut charger une fiche déjà existante -->
+
     <label for="patientFile">Sélectionner une fiche :</label>
+    <!-- <label> : étiquette descriptive associée au champ <select> -->
+    <!-- for="patientFile" : relie ce label au champ <select> via l’attribut id pour l’accessibilité -->
+
     <select id="patientFile" name="patientFile">
+    <!-- <select> : menu déroulant permettant à l'utilisateur de choisir parmi les fiches patient existantes -->
+    <!-- id="patientFile" : identifiant permettant de manipuler ce champ dans du JavaScript -->
+    <!-- name="patientFile" : nom de l’élément utilisé lors de l’envoi des données si un formulaire global était soumis -->
+
         <!-- Options générées dynamiquement en JS -->
+        <!-- Les balises <option> seront ajoutées via JavaScript selon les fichiers patients détectés dans la base -->
+        <!-- Chaque option représentera une fiche patient identifiable (ex: nom + date de naissance) -->
+
     </select>
-    <button type="button" onclick="loadPatient()">📂 Charger</button>
+
+    <button type="button" onclick="loadPatient()">Charger</button>
+    <!-- <button> : bouton permettant de déclencher une action -->
+    <!-- type="button" : empêche le comportement par défaut de soumission de formulaire -->
+    <!-- onclick="loadPatient()" : appelle une fonction JavaScript pour charger les données de la fiche sélectionnée -->
+    <!-- L’icône améliore la lisibilité et renforce l’action de "chargement de dossier" visuellement -->
 </div>
