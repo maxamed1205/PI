@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
     <!-- Lien vers le fichier CSS commun a toutes les pages (stocke dans le dossier static/css/) -->
     <!-- rel="stylesheet" : Indique que le fichier lié est une feuille de style CSS -->
-    <!-- {{ }} : Syntaxe spécifique à Jinja2 (Flask/Django) qui génère dynamiquement l'URL vers le fichier CSS situé dans le dossier "static/css" -->
+    <!-- les accolades : Syntaxe spécifique à Jinja2 (Flask/Django) qui génère dynamiquement l'URL vers le fichier CSS situé dans le dossier "static/css" -->
 
 
     {% block head %}
@@ -44,7 +44,7 @@
 
             <img src="{{ url_for('static', filename='image/chuv_logo.png') }}" alt="CHUV Logo">
             <!-- Affiche l'image du logo CHUV, stockee dans le dossier static/ -->
-            <!-- src : Chemin vers l'image à charger, généré dynamiquement par Jinja2 avec {{ }} -->
+            <!-- src : Chemin vers l'image à charger, généré dynamiquement par Jinja2 avec les accolades -->
             <!-- Le alt est un texte alternatif qui s'affiche si l'image ne charge pas -->
 
         </div>

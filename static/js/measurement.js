@@ -20,6 +20,9 @@ let latestDistal = null;      // Dernière valeur d'angle distal reçue
 let latestProximal = null;    // Dernière valeur d'angle proximal reçue
 let blockedPhalange = null;   // Variable indiquant la phalange bloquée sélectionnée par l’utilisateur
 
+let color = '#17a2b8'; // Couleur par défaut pour les points du graphique Force vs Angle
+
+
 // --------------------------------------------------
 // Fonction utilitaire pour formater l'heure (mm:ss)
 // --------------------------------------------------
@@ -34,10 +37,19 @@ function getFormattedTime() {
 // Initialisation des éléments une fois le DOM chargé
 // --------------------------------------------------
 
-document.addEventListener('DOMContentLoaded', () => {
-    blockedPhalange = window.blockedPhalange; // Récupère la variable JS globale définie dans le template HTML
-    console.log("🚀 JS ready — blockedPhalange =", blockedPhalange); // Affiche la phalange bloquée pour débogage
-    plotForceVsAngleEmpty(); // Initialise un graphique vide pour force vs angle (fonction à définir)
+document.addEventListener('DOMContentLoaded', () => { // Déclenché lorsque le HTML est complètement chargé (hors images, CSS)
+    blockedPhalange = window.blockedPhalange; // Récupère la variable globale transmise depuis le HTML (via template Jinja2)
+    console.log("🚀 JS ready — blockedPhalange =", blockedPhalange); // Affiche dans la console la phalange bloquée (utile pour déboguer)
+
+    plotForceGraph(); // Affiche dès le départ le graphique Force vs Temps (vide mais présent)
+    plotAmplitudeGraph(); // Affiche dès le départ le graphique Amplitude vs Temps (vide aussi)
+    plotForceVsAngleEmpty(); // Initialise le graphe Force vs Angle avec des tableaux vides
+
+    setTimeout(() => { // Délai pour laisser le temps au DOM/CSS de se stabiliser avant de forcer le redimensionnement
+        Plotly.Plots.resize(document.getElementById('graph-force')); // Force Plotly à recalculer la taille du graphe de force
+        Plotly.Plots.resize(document.getElementById('graph-amplitude')); // Force Plotly à redimensionner le graphe d’amplitude
+        Plotly.Plots.resize(document.getElementById('graph-force-vs-angle')); // Force Plotly à redimensionner le graphe force/angle
+    }, 200); // Délai en millisecondes (0.2 seconde) pour que tout soit bien prêt avant d’ajuster les graphes
 });
 
 // --------------------------------------------------
@@ -136,8 +148,10 @@ function maybePlotNewPoint() {
         let angleLibre = null; // Initialisation de la variable angle libre (celui non bloqué)
 
         if (blockedPhalange === "proximale") { // Si la phalange proximale est bloquée
+            color = '#d9534f'; // Rouge = distal (car c’est l’angle libre)
             angleLibre = latestDistal; // L’angle libre est distal
         } else if (blockedPhalange === "distale") { // Si la phalange distale est bloquée
+            color = '#007bff'; // Bleu = proximal (car c’est l’angle libre)
             angleLibre = latestProximal; // L’angle libre est proximal
         }
 
@@ -161,12 +175,12 @@ function plotForceVsAngleEmpty() { // Fonction pour initialiser un graphique vid
         y: [], // Initialise la série d’ordonnées (force) comme un tableau vide
         mode: 'markers', // Mode d’affichage : uniquement des points (pas de lignes)
         name: 'Force vs Angle libre', // Légende de la courbe dans l’interface graphique
-        line: { color: '#17a2b8' } // Couleur utilisée pour les points
+        line: { color: color } // Couleur utilisée pour les points
     }], {
         xaxis: { title: 'Angle libre (°)' }, // Titre affiché pour l’axe horizontal
         yaxis: { title: 'Force (N)' }, // Titre affiché pour l’axe vertical
         margin: { l: 50, r: 30, t: 20, b: 50 }, // Marges autour du graphique
-        title: "Force en fonction de l'angle mesuré (libre)" // Titre du graphique
+        // title: "Force en fonction de l'angle mesuré (libre)" // Titre du graphique
     }, { responsive: true }); // Rend le graphique adaptatif au redimensionnement de l’écran
 }
 
@@ -184,7 +198,7 @@ function updateForceVsAngle(forceValue, angleLibre) {
         y: forceVsAngleY, // Axe des ordonnées : forces
         mode: 'markers', // Type de graphique : nuage de points
         name: 'Force vs Angle libre', // Légende de la courbe
-        line: { color: '#17a2b8' } // Couleur de la courbe
+        line: { color: color } // Couleur de la courbe
     }], {
         xaxis: { title: 'Angle libre (°)' }, // Titre de l’axe des abscisses
         yaxis: { title: 'Force (N)' }, // Titre de l’axe des ordonnées
@@ -237,11 +251,26 @@ document.getElementById('newMeasureButton').addEventListener('click', function()
 });
 
 // --------------------------------------------------
-// Affiche ou cache les graphiques dynamiquement
+// Affiche ou cache les graphiques dynamiquementa
 // --------------------------------------------------
-document.getElementById('toggleGraphsButton').addEventListener('click', function() {
-    const container = document.getElementById('graphs-container'); // Récupère le conteneur des graphiques
-    graphsVisible = !graphsVisible; // Inverse l’état d’affichage
-    container.style.display = graphsVisible ? 'flex' : 'none'; // Affiche ou masque le bloc
-    this.textContent = graphsVisible ? "Cacher les graphiques" : "Afficher les graphiques"; // Met à jour le texte du bouton
+
+let graphsVisible = true; // État initial : graphes visibles
+
+document.getElementById('toggleGraphsButton').addEventListener('click', function () {
+    const container = document.getElementById('graphs-container'); // Sélectionne le conteneur des graphes
+    graphsVisible = !graphsVisible; // Inverse l’état (visible ↔ caché)
+
+    // Bascule la classe 'hidden' pour masquer ou afficher les graphes
+    container.classList.toggle('hidden');
+
+    // Met à jour le texte du bouton
+    this.textContent = graphsVisible ? "Cacher les graphiques" : "Afficher les graphiques";
+
+    // 🔧 Force Plotly à redimensionner les graphes après un court délai
+    if (graphsVisible) {
+        setTimeout(() => {
+            Plotly.Plots.resize(document.getElementById('graph-force'));
+            Plotly.Plots.resize(document.getElementById('graph-amplitude'));
+        }, 300); // Attendre que l'animation CSS soit terminée
+    }
 });

@@ -15,7 +15,8 @@
 <!-- Lien vers une feuille de style CSS spécifique à cette page -->
 <!-- rel="stylesheet" : Indique qu'il s'agit d'une feuille de style -->
 <!-- href : Définit le chemin du fichier CSS -->
-<!-- {{ url_for(...) }} : Syntaxe Jinja2 qui génère dynamiquement l'URL en fonction du chemin statique -->
+<!-- url_for() génère dynamiquement l’URL pour charger un fichier statique -->
+
 
 <script src="{{ url_for('static', filename='js/index.js') }}" defer></script>
 <!-- Lien vers un script JavaScript spécifique à cette page -->

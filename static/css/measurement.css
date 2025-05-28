@@ -44,21 +44,46 @@ body {
 
 /* --- CONTENEUR PRINCIPAL DE LA PAGE DE MESURE --- */
 #measurement-page {
-    display: flex; /* Utilise le modele Flexbox pour organiser les elements enfants */
-    flex-direction: column; /* Aligne les enfants verticalement (de haut en bas) */
-    height: 70vh; /* Fixe la hauteur a 70% de la hauteur visible de la fenetre */
-    width: 90vw; /* Fixe la largeur a 90% de la largeur visible de la fenetre */
-    margin: 0 auto; /* Centre horizontalement le conteneur dans la page */
-    background-color: #ffffff; /* Colore l'arriere-plan du conteneur en blanc */
-    border-radius: 10px; /* Arrondit les coins du conteneur avec 10 pixels de rayon */
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Ajoute une ombre douce autour du conteneur */
+    display: flex;                         /* Utilise le modèle Flexbox pour structurer le contenu verticalement */
+    flex-direction: column;               /* Aligne les enfants de haut en bas */
+    width: 90vw;                           /* Largeur du conteneur : 90% de la largeur de l’écran */
+    margin: 0 auto;                        /* Centre le conteneur horizontalement dans la page */
+    background-color: #ffffff;            /* Fond blanc pour le conteneur */
+    border-radius: 10px;                  /* Coins arrondis pour une meilleure esthétique */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);  /* Légère ombre portée pour effet de carte */
+    transition: height 0.3s ease;         /* Ajoute une transition fluide lors du changement de hauteur */
+    overflow: hidden;                     /* Cache le contenu qui dépasse si on réduit la hauteur */
 }
 
-/* --- CONTENEUR DES DEUX PANNEAUX DE GRAPHES --- */
-#graphs-container {
-    display: flex; /* Utilise Flexbox pour aligner les enfants (panneaux) horizontalement */
-    flex: 1; /* Fait en sorte que le conteneur prenne tout l'espace disponible restant */
+/* --- CLASSE APPLIQUÉE POUR MASQUER LE CONTENEUR #measurement-page --- */
+#measurement-page.collapsed {
+    height: 0;                             /* Hauteur forcée à 0px pour "replier" le conteneur */
+    padding: 0;                            /* Supprime tout espace intérieur éventuel */
+    border: none;                          /* Supprime les bordures si présentes */
+    box-shadow: none;                      /* Supprime l’ombre pour éviter l’espace visuel */
 }
+
+/* --- AJOUT OPTIONNEL POUR FORCER LE BOUTON "Nouvelle mesure" A RESTER VISIBLE --- */
+.new-measure-container {
+    text-align: center;                   /* Centre le bouton dans son conteneur */
+    margin: 20px 0;                       /* Ajoute un espace vertical autour du bouton */
+}
+
+/* --- CONTENEUR QUI SERA CACHÉ DYNAMIQUEMENT --- */
+#graphs-container {
+    display: flex;                 /* Affiche les 2 graphes côte à côte */
+    flex: 1;                       /* Remplit tout l’espace disponible */
+    transition: max-height 0.3s ease, opacity 0.3s ease;  /* Transition douce */
+    overflow: hidden;              /* Empêche le débordement */
+}
+
+/* --- VERSION CACHÉE DU GRAPHE --- */
+#graphs-container.hidden {
+    max-height: 0;                 /* Réduit la hauteur à zéro */
+    opacity: 0;                    /* Rend les éléments invisibles */
+    padding: 0;                    /* Enlève les espacements internes */
+}
+
 
 /* --- PANNEAUX GAUCHE ET DROIT POUR LES GRAPHES --- */
 #left-panel, #right-panel {
@@ -132,4 +157,36 @@ h2 {
 #graph-force-vs-angle {
     width: 100%;                     /* Le graphe occupe toute la largeur de son conteneur parent */
     height: 600px;                   /* Définit une hauteur fixe de 600 pixels pour le graphe (ajustable selon les besoins) */
+}
+
+/* Couleur rouge pour l’angle distal */
+#angle-distal {
+    color: #d9534f; /* correspond à la courbe 'Distal (°)' */
+    font-weight: bold; /* Rend le texte plus épais (en gras) afin d’attirer l’attention de l’utilisateur sur cette valeur dynamique importante (par exemple l’angle mesuré) */
+
+}
+
+/* Couleur bleue pour l’angle proximal */
+#angle-proximal {
+    color: #007bff; /* correspond à la courbe 'Proximal (°)' */
+    font-weight: bold; /* Rend le texte plus épais (en gras) afin d’attirer l’attention de l’utilisateur sur cette valeur dynamique importante (par exemple l’angle mesuré) */
+
+}
+
+
+/* --- STYLE DU BOUTON AFFICHER/CACHER LES GRAPHES --- */
+.graph-toggle-button {
+    padding: 12px 20px;                   /* Taille intérieure similaire aux autres boutons */
+    background-color: #6c757d;            /* Gris foncé, neutre */
+    border: none;                         /* Pas de bordure par défaut */
+    border-radius: 8px;                   /* Coins arrondis */
+    color: white;                         /* Texte en blanc */
+    font-size: 16px;                      /* Taille du texte lisible */
+    cursor: pointer;                      /* Curseur main au survol */
+    transition: background-color 0.3s ease; /* Animation douce sur le fond */
+}
+
+/* --- Effet de survol pour le bouton toggle --- */
+.graph-toggle-button:hover {
+    background-color: #5a6268; /* Gris un peu plus clair au survol */
 }

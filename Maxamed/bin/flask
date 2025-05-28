@@ -1,4 +1,4 @@
-#!/home/raspberry/Desktop/capture_de_force/Maxamed/bin/python3
+#!/home/max1205/PI/Maxamed/bin/python3
 # -*- coding: utf-8 -*-
 import re
 import sys

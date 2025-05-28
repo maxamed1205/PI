@@ -13,7 +13,7 @@
     <!-- Lien vers une feuille de style CSS spécifique à cette page -->
     <!-- rel="stylesheet" : Indique qu'il s'agit d'un fichier CSS -->
     <!-- href : Définit le chemin vers ce fichier CSS -->
-    <!-- {{ url_for(...) }} : Génère dynamiquement l'URL absolue en fonction du nom du fichier (ici : static/css/measurement.css) -->
+    <!-- les accolades: Génère dynamiquement l'URL absolue en fonction du nom du fichier (ici : static/css/measurement.css) -->
 
 {% endblock %}
 
@@ -27,7 +27,7 @@
 
     Patient : <span class="highlight">{{ patient.patient_name }}</span> |
     <!-- Affiche le nom du patient en gras ou en surbrillance grâce à la classe "highlight" -->
-    <!-- {{ patient.patient_name }} : Valeur dynamique injectée côté serveur par Jinja2 -->
+    <!--  patient.patient_name  : Valeur dynamique injectée côté serveur par Jinja2 -->
 
     Doigt : <span class="highlight">{{ patient.finger }}</span> |
     <!-- Affiche le doigt mesuré (index, majeur...) -->
@@ -52,70 +52,111 @@
 <div id="phalange-force-container">
     <!-- Conteneur pour afficher un graphique croisant la force mesurée et l'angle (dans le plan libre, pas contraint) -->
 
-    <h2 style="text-align: center;">Force en fonction de l'angle mesuré (libre)</h2>
-    <!-- Titre du graphique centré horizontalement -->
+    <!-- Balise HTML <h2> utilisée pour afficher un sous-titre visible sur la page -->
+    <!-- L’attribut style="text-align: center;" centre le texte horizontalement dans la page -->
+    <h2 style="text-align: center;">
+
+    <!-- Vérifie si la phalange bloquée est "proximale" -->
+    {% if patient.phalange == "proximale" %}
+
+        <!-- Affiche la phrase avec une coloration rouge uniquement sur "Distale - Intermédiaire" -->
+        Force en fonction de l'angle mesuré : 
+        <span style="color: #d9534f; font-weight: bold;">Distale - Intermédiaire</span>
+
+    <!-- Sinon, si la phalange bloquée est "distale" -->
+    {% elif patient.phalange == "distale" %}
+
+        <!-- Affiche la phrase avec une coloration bleue uniquement sur "Intermédiaire - Proximale" -->
+        Force en fonction de l'angle mesuré : 
+        <span style="color: #007bff; font-weight: bold;">Intermédiaire - Proximale</span>
+
+    <!-- Cas par défaut : phalange non précisée -->
+    {% else %}
+
+        <!-- Texte neutre sans coloration spécifique -->
+        Force en fonction de l'angle mesuré (libre)
+
+    {% endif %}
+
+    <!-- Fermeture de la balise <h2> -->
+    </h2>
+
 
     <div id="graph-force-vs-angle"></div>
     <!-- Zone vide (conteneur) destinée à recevoir un graphique généré dynamiquement par JavaScript (Plotly.js) -->
 </div>
 
-<!-- Bloc principal qui contient graphiques + bouton -->
+<!-- Bloc principal qui contient les deux graphes et le bouton de contrôle -->
 <div id="measurement-page">
-    <!-- Conteneur global regroupant tous les graphes, boutons, interactions de la page de mesure -->
-
-
+    <!-- Conteneur principal de tous les graphes de la page de mesure -->
+    
     <div id="graphs-container">
-    <!-- Sous-bloc contenant les graphes de force et d'angle, organisés en deux panneaux (gauche/droite) -->
+        <!-- Conteneur horizontal : divise en deux panneaux les deux types de graphique -->
 
         <div id="left-panel">
-        <!-- Panneau gauche : affichera le graphe de la force en fonction du temps -->
+            <!-- Panneau de gauche : contient le graphe de la force en fonction du temps -->
             <h2>Force en fonction du temps</h2>
-            <!-- <h2> : Balise HTML pour sous-titre de la force en fonction du temps -->
             <div id="graph-force"></div>
-            <!-- Zone vide à remplir dynamiquement avec un graphique via JavaScript -->
         </div>
 
         <div id="separator"></div>
-        {# Petite barre verticale qui separe le panneau gauche du panneau droit #}
-        <!-- Séparateur visuel vertical entre les deux panneaux -->
+        <!-- Barre verticale de séparation visuelle entre les deux panneaux -->
 
         <div id="right-panel">
-            <!-- Panneau droit : affichera le graphe de l'amplitude articulaire (angle) dans le temps -->
+            <!-- Panneau de droite : contient le graphe de l’amplitude articulaire -->
             <h2>Amplitude en fonction du temps</h2>
-            
+
             <div id="angle-values" style="text-align: center; margin-bottom: 10px;">
-             <!-- Affiche les deux valeurs d'angle actuelles (proximal et distal) en haut du graphique -->
-            <strong>Angle distal :</strong> <span id="angle-distal">–</span> °
-            <!-- <strong> : Label statique en gras -->
-            <!-- <span> : Valeur dynamique qui sera mise à jour via JavaScript (ex : 35.2°) -->
+                <!-- Conteneur centré affichant les deux valeurs d'angle (distal et proximal) -->
+                <!-- style="text-align: center;" : centre le texte horizontalement -->
+                <!-- margin-bottom: 10px; : ajoute un espacement vers le bas pour séparer visuellement ce bloc du graphique -->
+
+                <strong style="color: #d9534f; font-weight: bold;">
+                    <!-- Affiche le texte statique "Angle distal :" en rouge (#d9534f) et en gras -->
+                    Angle distal :
+                </strong>
+
+                <span id="angle-distal" style="font-weight: bold;">–</span> °
+                <!-- Affiche dynamiquement la valeur de l’angle distal -->
+                <!-- style="font-weight: bold;" : rend la valeur chiffrée plus visible pour l'utilisateur -->
+                <!-- Le contenu de ce span est remplacé dynamiquement en JavaScript via document.getElementById('angle-distal').textContent -->
 
                 &nbsp;&nbsp;&nbsp;
-                <!-- Espacement horizontal visuel entre les deux valeurs -->
-                <strong>Angle proximal :</strong> <span id="angle-proximal">–</span> °
-                <!-- Même principe que ci-dessus mais pour l'autre articulation -->
+                <!-- Ajoute un espacement horizontal visuel entre les deux textes (distal / proximal) -->
+
+                <strong style="color: #007bff; font-weight: bold;">
+                    <!-- Affiche le texte statique "Angle proximal :" en bleu (#007bff) et en gras -->
+                    Angle proximal :
+                </strong>
+
+                <span id="angle-proximal" style="font-weight: bold;">–</span> °
+                <!-- Affiche dynamiquement la valeur de l’angle proximal -->
+                <!-- Le style en gras permet de mieux lire la valeur en temps réel -->
+                <!-- Ce span est aussi mis à jour via JavaScript côté client -->
             </div>
 
-            {# Titre pour le panneau d'amplitude #}
+
             <div id="graph-amplitude"></div>
-            <!-- Conteneur vide qui recevra dynamiquement le graphique d'angle vs. temps via JavaScript -->
+            <!-- Graphique d’amplitude dynamique -->
         </div>
     </div>
 
-    <!-- Bouton Afficher / Cacher les graphiques -->
     <div style="text-align: center; margin-top: 10px;">
-        <button id="toggleGraphsButton">Cacher les graphiques</button>
-        <!-- Permet d'afficher ou de masquer dynamiquement les graphes avec un effet JavaScript -->
+        <!-- Zone contenant le bouton pour cacher/afficher les graphes -->
+        <button id="toggleGraphsButton" class="graph-toggle-button">
+            Cacher les graphiques
+        </button>
+        <!-- Ce bouton agira sur tout le bloc #measurement-page via JS -->
     </div>
-
-
-    <div class="new-measure-container">
-        <!-- Conteneur centré pour afficher le bouton "Nouvelle mesure" -->
-        {# Conteneur pour centrer le bouton Nouvelle mesure sous les graphes #}
-        <button id="newMeasureButton">Nouvelle mesure</button>
-         <!-- Ce bouton redirige l'utilisateur vers la page d'accueil  -->
-    </div>
-
 </div>
+
+<!-- ✅ Nouveau conteneur en dehors du bloc #measurement-page -->
+<div class="new-measure-container">
+    <!-- Cette zone reste toujours visible même si les graphiques sont masqués -->
+    <button id="newMeasureButton">Nouvelle mesure</button>
+    <!-- Bouton indépendant qui redirige l'utilisateur vers la page d'accueil -->
+</div>
+
 
 {% endblock %}
 <!-- Fin du bloc principal de contenu propre à la page de mesure -->
