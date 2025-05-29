@@ -159,7 +159,7 @@ Projet réalisé par :
 **Maxamed Nuur Maxamed**,  
 en collaboration avec **Favario M.**, **Loup O.** et **Di Benedetto A.**
 
-Encadrement : Sciences de l'information médicale – HUG  
+Encadrement : Master HES-SO cours -> Projet Interdiscipliare - Dispositif médical
 HES-SO Master – 2024–2025
 
 ---
