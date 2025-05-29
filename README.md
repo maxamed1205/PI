@@ -79,10 +79,52 @@ Les données sont transmises uniquement en cas de variation significative.
 
 Le système s’appuie sur :
 - Un capteur de force **HX711** (lecture via GPIO)
-- Deux IMUs **BMI270** (lecture via bus I2C)
-- Un microcontrôleur (ex. Raspberry Pi) exécutant le serveur Flask
+- Trois IMUs **BMI270** (lecture via bus I2C)
+- Un microcontrôleur **Raspberry Pi 5** qui exécute le serveur Flask
 
-Un schéma de câblage est disponible dans le dossier `docs/` ou dans le rapport.
+### 🔧 Conception électronique
+
+Le système est conçu pour mesurer trois types de données biomécaniques :
+- La **force** exercée par l’utilisateur
+- L’**angle de la phalange distale**
+- L’**angle de la phalange proximale**
+
+#### ➤ Mesure d’angle (IMU)
+
+Les angles articulaires sont obtenus à l’aide d’IMU (accéléromètre + gyroscope).  
+- L’accéléromètre fournit une mesure de l’orientation relative au sol.
+- Le gyroscope donne la vitesse de rotation.  
+Pour éviter les dérives dans le temps, un **filtre de Kalman** est utilisé. Il ajuste les données en continu, ce qui améliore la stabilité des résultats.
+
+L’angle entre deux phalanges est calculé par la différence entre les mesures de deux IMUs placés de part et d’autre de l’articulation.
+
+#### ➤ Mesure de force (HX711)
+
+La mesure de force repose sur un **capteur de déformation**, relié à un module **HX711**. Ce module convertit les données analogiques du capteur en signaux numériques lisibles par le Raspberry Pi via GPIO.
+
+---
+
+### 🧷 Connexions GPIO (Raspberry Pi 5)
+
+Voici le tableau de câblage utilisé pour connecter tous les capteurs au Raspberry Pi 5 :
+
+| N° Connecteur | GPIO | Fonction                          |
+|---------------|------|-----------------------------------|
+| 1             | -    | 3.3V alimentation IMU 1           |
+| 2             | -    | 5V alimentation HX711             |
+| 3             | 2    | SDA IMU 1                         |
+| 5             | 3    | SCL IMU 1                         |
+| 6             | -    | GND IMU 1                         |
+| 9             | -    | GND HX711                         |
+| 12            | 18   | CLK HX711                         |
+| 13            | 27   | DATA HX711                        |
+| 17            | -    | 3.3V alimentation IMU 2–3         |
+| 27            | 0    | SDA IMU 2                         |
+| 28            | 1    | SCL IMU 2                         |
+| 30            | -    | GND IMU 2                         |
+| 32            | 12   | SDA IMU 3                         |
+| 33            | 13   | SCL IMU 3                         |
+| 34            | -    | GND IMU 3                         |
 
 ---
 
