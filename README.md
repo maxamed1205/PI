@@ -75,15 +75,13 @@ Les données sont transmises uniquement en cas de variation significative.
 
 ---
 
-<p align="center">
-  <img src="https://raw.githubusercontent.com/maxamed1205/PI/main/Solution_finale.png" alt="Schéma de câblage complet" width="600"/>
-</p>
 
-
-Solution_finale.png
 
 ## 📷 Schéma de câblage
 
+<p align="center">
+  <img src="Solution_finale.png" alt="Schéma de câblage complet" width="700"/>
+</p>
 
 Le système s’appuie sur :
 - Un capteur de force **HX711** (lecture via GPIO)
