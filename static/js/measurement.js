@@ -493,7 +493,7 @@ function renderForceVsAnglePlot() {
         traces.push({
             x: serie.dataX,                     // Liste des angles
             y: serie.dataY,                     // Liste des forces
-            mode: 'lines+markers',              // Lignes reliées avec des points visibles
+            mode: 'markers',              // Lignes reliées avec des points visibles
             name: serie.label,                  // Nom affiché dans la légende
             line: { color: serie.color }        // Couleur spécifique à cette série
         });
