@@ -1,0 +1,23 @@
+<!-- Composant de contrôle de la prise de mesure -->
+<div id="controlMeasureForm" style="margin-top: 30px; display: flex; align-items: flex-start; gap: 40px;">
+    <!-- Conteneur global, en ligne avec espacement -->
+
+    <!-- Partie gauche : démarrage de mesure -->
+    <div style="flex: 1;">
+        <label for="lockedAngle">Angle de blocage (°) :</label>
+        <input type="number" id="lockedAngle" placeholder="Ex: 30" min="0" max="120" style="margin-right: 10px; width: 80px;">
+        <!-- Champ de saisie de l’angle bloqué en degrés -->
+
+        <button type="button" onclick="onStartMeasurementSeries()">🚀 Démarrer une nouvelle mesure</button>
+        <!-- Bouton pour démarrer une nouvelle série de mesure (appel JS) -->
+    </div>
+
+    <!-- Partie droite : filtre de courbes affichées -->
+    <div style="flex: 1;">
+        <label for="seriesSelector">Afficher une série spécifique :</label>
+        <select id="seriesSelector" onchange="renderForceVsAnglePlot()" style="margin-left: 10px;">
+            <option value="all">Toutes les courbes</option>
+            <!-- Les autres options seront ajoutées dynamiquement par JS (après chaque mesure enregistrée) -->
+        </select>
+    </div>
+</div>

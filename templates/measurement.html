@@ -48,43 +48,104 @@
 
 </div>
 
-<!-- Nouveau graphique : Force en fonction de l'angle libre -->
-<div id="phalange-force-container">
-    <!-- Conteneur pour afficher un graphique croisant la force mesurée et l'angle (dans le plan libre, pas contraint) -->
 
-    <!-- Balise HTML <h2> utilisée pour afficher un sous-titre visible sur la page -->
-    <!-- L’attribut style="text-align: center;" centre le texte horizontalement dans la page -->
-    <h2 style="text-align: center;">
-
-    <!-- Vérifie si la phalange bloquée est "proximale" -->
-    {% if patient.phalange == "proximale" %}
-
-        <!-- Affiche la phrase avec une coloration rouge uniquement sur "Distale - Intermédiaire" -->
-        Force en fonction de l'angle mesuré : 
-        <span style="color: #d9534f; font-weight: bold;">Distale - Intermédiaire</span>
-
-    <!-- Sinon, si la phalange bloquée est "distale" -->
-    {% elif patient.phalange == "distale" %}
-
-        <!-- Affiche la phrase avec une coloration bleue uniquement sur "Intermédiaire - Proximale" -->
-        Force en fonction de l'angle mesuré : 
-        <span style="color: #007bff; font-weight: bold;">Intermédiaire - Proximale</span>
-
-    <!-- Cas par défaut : phalange non précisée -->
-    {% else %}
-
-        <!-- Texte neutre sans coloration spécifique -->
-        Force en fonction de l'angle mesuré (libre)
-
-    {% endif %}
-
-    <!-- Fermeture de la balise <h2> -->
-    </h2>
-
-
-    <div id="graph-force-vs-angle"></div>
-    <!-- Zone vide (conteneur) destinée à recevoir un graphique généré dynamiquement par JavaScript (Plotly.js) -->
+<!-- ✅ BOUTONS DE SIMULATION DE MESURES (TEST LOCAL SANS RASPBERRY) -->
+<div class="save-button-container">
+    <button onclick="simulateFakeMeasurementSeries('30°')">🎯 Simuler une série pour 30°</button>
+    <button onclick="simulateFakeMeasurementSeries('45°')">🎯 Simuler une série pour 45°</button>
 </div>
+
+
+<!-- Conteneur global horizontal -->
+<div style="display: flex; justify-content: space-between; align-items: flex-start; width: 95%; margin: auto; gap: 30px;">
+    <!-- Ce <div> structure deux colonnes horizontales (graphique à gauche, panneau de contrôle à droite) -->
+    <!-- display: flex → active la disposition en ligne des éléments enfants -->
+    <!-- justify-content: space-between → espace maximal entre les deux colonnes -->
+    <!-- align-items: flex-start → aligne les blocs en haut du conteneur -->
+    <!-- width: 95% → largeur relative pour laisser un peu de marge à gauche et droite -->
+    <!-- margin: auto → centre horizontalement le conteneur dans la page -->
+    <!-- gap: 30px → espace horizontal entre les deux colonnes -->
+
+    <!-- Conteneur principal avec graphique et titre -->
+    <div id="phalange-force-container" style="flex: 3;">
+        <!-- flex: 3 → ce bloc occupe 3 fois plus d’espace que l’autre colonne (rapport 3:1) -->
+
+        <!-- Titre centré du graphique -->
+        <h2 style="text-align: center;">
+            <!-- Balise HTML <h2> pour afficher un sous-titre visible et structuré -->
+            <!-- text-align: center → centre horizontalement le texte -->
+
+            Force en fonction de l'angle mesuré :
+            <!-- Texte statique précédant le détail dynamique de la phalange -->
+
+            {% if patient.phalange == "proximale" %}
+                <!-- Si la phalange bloquée est "proximale", on déduit que les deux libres sont "distale" et "intermédiaire" -->
+
+                <span style="color: #d9534f; font-weight: bold;">Distale - Intermédiaire</span>
+                <!-- Affiche les deux phalanges libres en rouge (#d9534f) et en gras -->
+            {% elif patient.phalange == "distale" %}
+                <!-- Si la phalange bloquée est "distale", les libres sont "intermédiaire" et "proximale" -->
+
+                <span style="color: #007bff; font-weight: bold;">Intermédiaire - Proximale</span>
+                <!-- Affiche les phalanges libres en bleu (#007bff) et en gras -->
+            {% else %}
+                <!-- Cas par défaut : aucune phalange bloquée spécifiée -->
+
+                (libre)
+                <!-- Texte neutre, sans couleur ni emphase -->
+            {% endif %}
+        </h2>
+
+        <!-- Graphique de force en fonction de l’angle -->
+        <div id="graph-force-vs-angle"></div>
+        <!-- Ce <div> est utilisé comme conteneur de graphique dynamique via Plotly.js -->
+        <!-- Le code JavaScript insère ici une figure avec les courbes enregistrées -->
+    </div>
+
+    <!-- Colonne droite à l’extérieur de la carte blanche -->
+    <div id="series-controls-panel">
+        <!-- Ce panneau contient les informations et les contrôles liés aux séries -->
+        <!-- Stylé via le CSS (voir #series-controls-panel dans measurement.css) -->
+
+        <p>
+            <!-- Bloc de texte contenant l’angle détecté -->
+            <strong>Angle de blocage détecté :</strong>
+            <!-- Titre en gras pour signaler que l’information est importante -->
+
+            <span id="autoAngleDisplay" style="font-weight: bold;">–</span>
+            <!-- Zone qui sera remplie dynamiquement via JavaScript -->
+            <!-- style="color: #28a745;" → vert vif pour signaler une valeur active et valide -->
+            <!-- Valeur par défaut affichée : tiret (–) tant qu’aucune mesure n’a été lancée -->
+        </p>
+
+        <!-- Bouton pour démarrer une nouvelle série de mesure -->
+        <button id="startSeriesButton" class="start-button">
+            <!-- id="startSeriesButton" → permet à JS d’ajouter un événement "onclick" pour lancer une mesure -->
+            <!-- class="start-button" → permet de styliser le bouton (voir CSS associé) -->
+            Démarrer une nouvelle mesure
+            <!-- Emoji symbolisant un nouveau départ, et texte explicite pour l’utilisateur -->
+        </button>
+
+        <!-- Libellé associé au menu déroulant ci-dessous -->
+        <label for="seriesSelector" style="margin-top: 20px; display: block;">
+            <!-- "for='seriesSelector'" → connecte ce label au menu déroulant -->
+            <!-- style="display: block;" → force le retour à la ligne pour que le label soit au-dessus du <select> -->
+            <!-- margin-top: 20px → ajoute de l’espace au-dessus du label pour aérer l’interface -->
+            Afficher une série spécifique :
+        </label>
+
+        <!-- Menu déroulant permettant de filtrer les courbes visibles -->
+        <select id="seriesSelector">
+            <!-- Ce <select> est rempli dynamiquement depuis JavaScript en fonction des séries enregistrées -->
+            <!-- id="seriesSelector" → permet de sélectionner et de gérer les courbes à afficher -->
+
+            <option value="all">Toutes les courbes</option>
+            <!-- Option par défaut : affiche toutes les séries superposées sur le graphique -->
+            <!-- Les autres options sont ajoutées en JS à la fin de chaque série automatiquement détectée -->
+        </select>
+    </div>
+</div>
+
 
 <!-- Bloc principal qui contient les deux graphes et le bouton de contrôle -->
 <div id="measurement-page">

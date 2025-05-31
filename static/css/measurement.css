@@ -116,11 +116,6 @@ h2 {
     font-size: 20px; /* Fixe la taille du texte du titre a 20 pixels */
 }
 
-/* --- CONTENEUR DU BOUTON NOUVELLE MESURE --- */
-.new-measure-container {
-    text-align: center; /* Centre horizontalement le bouton */
-    margin: 10px 0; /* Ajoute un espace de 10 pixels en haut et en bas */
-}
 
 /* --- STYLE DU BOUTON NOUVELLE MESURE --- */
 #newMeasureButton {
@@ -153,6 +148,11 @@ h2 {
     border-radius: 10px;             /* Arrondit les coins du conteneur avec un rayon de 10 pixels */
     box-shadow: 0 2px 6px rgba(0,0,0,0.1); /* Applique une ombre discrète autour du bloc pour lui donner du relief */
 }
+
+#phalange-force-container h2 {
+    margin-top: 0; /* Supprime l'espace qui pousse le graphique vers le bas */
+}
+
 
 #graph-force-vs-angle {
     width: 100%;                     /* Le graphe occupe toute la largeur de son conteneur parent */
@@ -189,4 +189,54 @@ h2 {
 /* --- Effet de survol pour le bouton toggle --- */
 .graph-toggle-button:hover {
     background-color: #5a6268; /* Gris un peu plus clair au survol */
+}
+
+
+
+
+#force-vs-angle-layout {
+    display: flex;                 /* Utilise Flexbox pour organiser les enfants (graphique et contrôles) horizontalement */
+    flex-direction: row;          /* Aligne les éléments enfants sur une ligne (horizontale) */
+    gap: 30px;                    /* Ajoute un espace de 30px entre les éléments enfants */
+    justify-content: space-between; /* Répartit les éléments avec un espace entre eux (gauche ↔ droite) */
+    align-items: flex-start;      /* Aligne les éléments en haut du conteneur (alignement vertical) */
+    padding: 20px;                /* Ajoute un espace interne de 20px autour du contenu */
+}
+
+#graph-force-vs-angle-panel {
+    flex: 3;                      /* Occupe 3 parts d’espace sur les 4 disponibles (¾ de la largeur) */
+}
+
+#series-controls-panel {
+    flex: 1;                      /* Occupe 1 part d’espace (¼ de la largeur totale) */
+    background-color: #f8f9fa;    /* Fond gris très clair pour délimiter visuellement cette zone */
+    padding: 20px;                /* Espace interne autour du contenu pour éviter un aspect tassé */
+    border-radius: 10px;          /* Coins arrondis pour un rendu plus doux et esthétique */
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1); /* Ombre légère pour donner du relief au panneau */
+    text-align: left;             /* Aligne tout le texte à gauche (utile pour les labels et valeurs) */
+    min-width: 200px;             /* Largeur minimale imposée pour éviter un panneau trop étroit */
+    margin-top: 100px;  /* Ajuste selon ton rendu, entre 30px et 40px fonctionne bien */
+}
+
+.start-button {
+    padding: 10px 20px;           /* Espace interne confortable : 10px vertical, 20px horizontal */
+    background-color: #5a6268;    /* Couleur grise signalant une action positive (commencer) */
+    border: none;                 /* Supprime la bordure par défaut du bouton */
+    border-radius: 8px;           /* Coins arrondis pour un style moderne */
+    color: white;                 /* Texte blanc pour un bon contraste avec le fond vert */
+    font-size: 16px;              /* Taille de police légèrement augmentée pour meilleure visibilité */
+    cursor: pointer;             /* Curseur en forme de main au survol → indique que c’est cliquable */
+    margin-top: 10px;             /* Espace au-dessus du bouton pour l’isoler des éléments précédents */
+    width: 100%;                  /* Le bouton s’étire pour occuper toute la largeur du panneau */
+}
+
+.start-button:hover {
+    background-color: #218838;    /* Fonce légèrement le vert au survol pour créer un retour visuel (effet hover) */
+}
+
+#seriesSelector {
+    width: 100%;                  /* Le menu déroulant occupe toute la largeur disponible de son conteneur */
+    padding: 8px;                 /* Espace interne autour du texte pour un rendu plus lisible */
+    margin-top: 5px;              /* Petit espace au-dessus du select (séparation du label) */
+    font-size: 14px;              /* Taille de police standard pour lisibilité et cohérence avec les autres champs */
 }
