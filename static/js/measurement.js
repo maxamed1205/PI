@@ -243,6 +243,7 @@ function maybePlotNewPoint() {
 
         if (lastForce !== undefined && angleLibre !== null) { // Si la force et l’angle libre sont valides
             // updateForceVsAngle(lastForce, angleLibre); // Ajoute le point au graphe force vs angle
+            appendToCurrentSeries(parseFloat(lastForce), parseFloat(angleLibre)); // Ajoute le point au graphe force vs angle
             console.log("✅ Donnée ajoutée au graphique Force vs Angle:", lastForce, angleLibre);
         }
 

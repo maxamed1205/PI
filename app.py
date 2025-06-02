@@ -38,6 +38,10 @@ hx = HX711(dout_pin=DOUT_PIN, pd_sck_pin=SCK_PIN)
 bus_num = [0, 1, 2]
 # Initialisation de la lecture des angles articulaires via IMU sur le bus I2C primaire
 ang = ReadAngle_IMU(bus_num, I2C_PRIM_ADDR)
+# Calibration des capteurs IMU pour la partie gyroscopique
+ang.calibrate_gyro_bias()
+# Calibration des offsets pour les capteurs IMU
+ang.calibrate_offsets(100)  
 
 @app.route('/')  # Route principale (accueil)
 def home():

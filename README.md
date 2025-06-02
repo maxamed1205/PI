@@ -95,14 +95,20 @@ Le système est conçu pour mesurer trois types de données biomécaniques :
 - L’**angle de la phalange distale**
 - L’**angle de la phalange proximale**
 
-#### ➤ Mesure d’angle (IMU)
+#### ➤ Mesure d’angle (IMU bmi270)
 
 Les angles articulaires sont obtenus à l’aide d’IMU (accéléromètre + gyroscope).  
-- L’accéléromètre fournit une mesure de l’orientation relative au sol.
-- Le gyroscope donne la vitesse de rotation.  
-Pour éviter les dérives dans le temps, un **filtre de Kalman** est utilisé. Il ajuste les données en continu, ce qui améliore la stabilité des résultats.
+- L’accéléromètre fournit une mesure de l'accélération terrestre
+- Le gyroscope donne la vitesse de rotation.
 
-L’angle entre deux phalanges est calculé par la différence entre les mesures de deux IMUs placés de part et d’autre de l’articulation.
+La mesure des angles passent par la bibliothèque *ahrs.filters* et 
+*scipy.spatial.transform* pour utiliser le filtre [**Madgwick**](https://ahrs.readthedocs.io/en/latest/filters/madgwick.html#) afin d'obtenir les valeurs sous quaternions afin 
+de les utiliser pour la mesure 
+de rotation et obtenir l'angle relatif entre les IMU 
+[**Rotation**](https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.transform.Rotation.html).
+L’angle mesurée est, à chaque fois, celui entre deux phalanges (référentiel 
+au-dessus de la phalange avec angle qui augmente avec la flexion des 
+phalanges).
 
 #### ➤ Mesure de force (HX711)
 
