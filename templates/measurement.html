@@ -49,13 +49,6 @@
 </div>
 
 
-<!-- ✅ BOUTONS DE SIMULATION DE MESURES (TEST LOCAL SANS RASPBERRY) -->
-<div class="save-button-container">
-    <button onclick="simulateFakeMeasurementSeries('30°')">🎯 Simuler une série pour 30°</button>
-    <button onclick="simulateFakeMeasurementSeries('45°')">🎯 Simuler une série pour 45°</button>
-</div>
-
-
 <!-- Conteneur global horizontal -->
 <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 95%; margin: auto; gap: 30px;">
     <!-- Ce <div> structure deux colonnes horizontales (graphique à gauche, panneau de contrôle à droite) -->
@@ -125,6 +118,12 @@
             Démarrer une nouvelle mesure
             <!-- Emoji symbolisant un nouveau départ, et texte explicite pour l’utilisateur -->
         </button>
+
+        <!-- 🔵 Bouton pour interrompre manuellement la série en cours -->
+         <button id="stopSeriesButton" class="start-button danger" style="margin-top: 10px;" disabled>
+            🛑 Interrompre la mesure
+        </button>
+
 
         <!-- Libellé associé au menu déroulant ci-dessous -->
         <label for="seriesSelector" style="margin-top: 20px; display: block;">
@@ -239,6 +238,21 @@
         if (window.DEBUG) {
             console.log("📦 Phalange bloquée (depuis Jinja):", window.blockedPhalange);
             // <!-- Affiche la valeur dans la console pour vérification/debug -->
+        }
+    </script>
+
+
+    <script>
+        // Rend les données du patient accessibles à JavaScript via une variable globale
+        window.patientData = {
+            patient_name: "{{ patient.patient_name }}",  // Nom du patient
+            finger: "{{ patient.finger }}",              // Doigt concerné
+            phalange: "{{ patient.phalange }}",          // Phalange bloquée
+            operator: "{{ patient.operator }}"           // Nom de l’opérateur
+        };
+
+        if (window.DEBUG) {
+            console.log("🧾 Données patient injectées :", window.patientData);
         }
     </script>
 

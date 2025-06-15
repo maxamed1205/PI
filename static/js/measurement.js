@@ -120,23 +120,72 @@ document.addEventListener('DOMContentLoaded', () => { // Déclenché lorsque le 
         Plotly.Plots.resize(document.getElementById('graph-force-vs-angle')); // Force Plotly à redimensionner le graphe force/angle
     }, 200); // Délai en millisecondes (0.2 seconde) pour que tout soit bien prêt avant d’ajuster les graphes
 
-    // // 🔽 AJOUTE CECI ICI 🔽
-    // const startBtn = document.getElementById("startSeriesButton");
-    // if (startBtn) {
-    //     startBtn.addEventListener("click", () => {
-    //         // Simulation automatique
-    //         const anglesPossibles = ["30°", "45°", "60°", "75°"];
-    //         const angleAleatoire = anglesPossibles[Math.floor(Math.random() * anglesPossibles.length)];
-    //         simulateFakeMeasurementSeries(angleAleatoire);
-    //     });
-    // }
-    const startBtn = document.getElementById("startSeriesButton");
-    if (startBtn) {
-        startBtn.addEventListener("click", () => {
-            onStartMeasurementSeries();  // ⬅️ Utilise les vraies valeurs
+    const startBtn = document.getElementById("startSeriesButton"); // ➤ Récupère le bouton HTML correspondant à l’ID "startSeriesButton" (bouton 'Démarrer la mesure')
+
+    if (startBtn) { // ➤ Vérifie que le bouton existe bien dans le DOM (évite les erreurs si l’élément est introuvable)
+
+        startBtn.disabled = true; // 🔒 Désactive le bouton par défaut au chargement de la page, tant que les données (angles) ne sont pas encore disponibles
+
+        startBtn.addEventListener("click", () => { // ➤ Ajoute un écouteur d’événement : quand l’utilisateur clique sur le bouton...
+            onStartMeasurementSeries(); // ➤ ... on appelle la fonction qui lance une nouvelle série de mesure avec l’angle détecté automatiquement
         });
+
     }
+    const stopBtn = document.getElementById("stopSeriesButton"); // 🔴 Bouton "Interrompre la mesure"
+
+    if (stopBtn) { // ✅ Vérifie si le bouton existe réellement dans le DOM (évite des erreurs si l’élément est absent)
+
+        console.log("🛑 Bouton 'Interrompre la mesure' détecté dans le DOM"); // 🪵 Log informatif : confirme que le bouton est bien présent dans la page
+
+        stopBtn.addEventListener("click", () => { // ➕ Ajoute un écouteur d’événement : exécute la fonction ci-dessous lorsqu’un clic est effectué sur le bouton
+
+            console.log("🧨 Clic détecté sur le bouton 'Interrompre la mesure'"); // 🪵 Log : confirme que le clic sur le bouton a bien été détecté
+
+            if (currentSeries) { // ✅ Vérifie s’il existe actuellement une série de mesure en cours
+                console.log("📊 Série en cours trouvée :", currentSeries.label); // 🪵 Log : affiche le nom (label) de la série active
+            } else {
+                console.warn("⚠️ Aucune série active au moment de l'interruption !"); // ⚠️ Avertit qu’aucune série n’était en cours (rien à interrompre)
+            }
+
+            if (currentSeries && !currentSeries.stopped) { // ✅ Double condition : vérifie qu’une série est active ET qu’elle n’est pas encore marquée comme arrêtée
+
+                currentSeries.stopped = true; // 🛑 Marque explicitement la série comme arrêtée (évite que de nouveaux points soient ajoutés)
+                measurementSeries.push(currentSeries); // 📥 Ajoute cette série complète à la liste globale des séries enregistrées (pour affichage ou export)
+                console.log("📥 Série ajoutée à la liste des séries enregistrées :", currentSeries.label); // 🪵 Log de confirmation de l’enregistrement
+
+                currentSeries = null; // 🔄 Réinitialise la variable (plus de série active à ce stade, on attend une nouvelle série si besoin)
+                renderForceVsAnglePlot(); // 🔄 Met à jour le graphique "Force vs Angle" pour refléter l’arrêt de la série actuelle
+                alert("Série interrompue manuellement !"); // 🔔 Message utilisateur : feedback visuel que la série a été bien arrêtée
+
+            } else {
+                console.log("⏸️ Série déjà arrêtée ou inexistante — aucune action nécessaire."); // ℹ️ Cas où soit la série est déjà arrêtée, soit aucune n’a été démarrée : rien à faire
+            }
+
+        });
+
+    } else {
+        console.warn("❌ Bouton 'stopSeriesButton' introuvable dans le DOM !"); // ⚠️ Avertissement si le bouton n’est pas trouvé dans la page HTML (problème potentiel d’intégration ou de chargement)
+    }
+
+
 });
+
+function updateStartButtonState() {
+    const startBtn = document.getElementById("startSeriesButton"); // ➤ Récupère le bouton HTML 'Démarrer la mesure' via son ID
+
+    if (!startBtn) return; // ➤ Si le bouton n’existe pas dans la page, on quitte immédiatement la fonction (sécurité)
+
+    // --------------------------------------------------
+    // Vérifie si la donnée nécessaire est disponible
+    // --------------------------------------------------
+
+    const ready = // ➤ Variable booléenne : indique si le bouton peut être activé
+        (blockedPhalange === "proximale" && latestDistal !== null) || // ➤ Cas 1 : si la phalange bloquée est proximale, alors on attend un angle distal valide
+        (blockedPhalange === "distale" && latestProximal !== null);   // ➤ Cas 2 : si la phalange bloquée est distale, alors on attend un angle proximal valide
+
+    startBtn.disabled = !ready; // ➤ Active le bouton si `ready` est vrai, sinon le désactive (inversion logique avec `!`)
+}
+
 
 // --------------------------------------------------
 // Réception des données de force depuis le serveur
@@ -156,7 +205,8 @@ socket.on('force_update', function(data) {
 socket.on('angle_distal_update', function(data) {
     latestDistal = parseFloat(data['Angle distale']).toFixed(1); // Convertit l’angle en nombre à 1 décimale
     document.getElementById('angle-distal').textContent = latestDistal; // Affiche l’angle dans l’interface
-    console.log("📡 distal reçu:", data); // Affiche dans la console pour vérification
+    // console.log("📡 distal reçu:", data); // Affiche dans la console pour vérification
+    updateStartButtonState(); // ✅ Vérifie si bouton peut être activé
     maybePlotNewPoint(); // Tente de tracer un point dans force vs angle (à condition que les deux angles soient dispo)
 });
 
@@ -167,7 +217,8 @@ socket.on('angle_distal_update', function(data) {
 socket.on('angle_proximal_update', function(data) {
     latestProximal = parseFloat(data['Angle proximal']).toFixed(1); // Convertit l’angle en nombre à 1 décimale
     document.getElementById('angle-proximal').textContent = latestProximal; // Affiche l’angle dans l’interface
-    console.log("📡 proximal reçu:", data); // Affiche dans la console pour vérification
+    // console.log("📡 proximal reçu:", data); // Affiche dans la console pour vérification
+    updateStartButtonState(); // ✅ Vérifie si bouton peut être activé
     maybePlotNewPoint(); // Tente de tracer un point dans force vs angle
 });
 
@@ -221,6 +272,7 @@ function plotAmplitudeGraph() {
 // --------------------------------------------------
 // Ajoute un point sur les graphiques si les deux angles sont disponibles
 // --------------------------------------------------
+
 function maybePlotNewPoint() {
     if (latestDistal !== null && latestProximal !== null) { // Vérifie que les deux mesures d'angles ont été reçues
         const now = getFormattedTime(); // Récupère l’heure actuelle
@@ -241,59 +293,13 @@ function maybePlotNewPoint() {
             angleLibre = latestProximal; // L’angle libre est proximal
         }
 
-        if (lastForce !== undefined && angleLibre !== null) { // Si la force et l’angle libre sont valides
-            // updateForceVsAngle(lastForce, angleLibre); // Ajoute le point au graphe force vs angle
-            appendToCurrentSeries(parseFloat(lastForce), parseFloat(angleLibre)); // Ajoute le point au graphe force vs angle
-            console.log("✅ Donnée ajoutée au graphique Force vs Angle:", lastForce, angleLibre);
+        // ⛔ Ce bloc est indépendant — ajoute au graphique force vs angle SEULEMENT si une série est active
+        if (lastForce !== undefined && angleLibre !== null && currentSeries && !currentSeries.stopped) {
+            console.log("🧪 Point ajouté à la série :", lastForce, angleLibre);
+            appendToCurrentSeries(parseFloat(lastForce), parseFloat(angleLibre));
         }
-
-        latestDistal = null; // Réinitialise la dernière valeur reçue
-        latestProximal = null;
     }
 }
-
-// --------------------------------------------------
-// Initialise un graphique vide Force vs Angle libre
-// --------------------------------------------------
-
-// function plotForceVsAngleEmpty() { // Fonction pour initialiser un graphique vide Force vs Angle
-//     Plotly.newPlot('graph-force-vs-angle', [{ // Crée un nouveau tracé Plotly dans l’élément HTML avec l’ID spécifié
-//         x: [], // Initialise la série d’abscisses (angle libre) comme un tableau vide
-//         y: [], // Initialise la série d’ordonnées (force) comme un tableau vide
-//         mode: 'markers', // Mode d’affichage : uniquement des points (pas de lignes)
-//         name: 'Force vs Angle libre', // Légende de la courbe dans l’interface graphique
-//         line: { color: color } // Couleur utilisée pour les points
-//     }], {
-//         xaxis: { title: 'Angle libre (°)' }, // Titre affiché pour l’axe horizontal
-//         yaxis: { title: 'Force (N)' }, // Titre affiché pour l’axe vertical
-//         margin: { l: 50, r: 30, t: 20, b: 50 }, // Marges autour du graphique
-//         // title: "Force en fonction de l'angle mesuré (libre)" // Titre du graphique
-//     }, { responsive: true }); // Rend le graphique adaptatif au redimensionnement de l’écran
-// }
-
-// --------------------------------------------------
-// Met à jour le graphique Force en fonction de l’Angle libre
-// --------------------------------------------------
-// function updateForceVsAngle(forceValue, angleLibre) {
-//     forceVsAngleX.push(parseFloat(angleLibre)); // Ajoute l’angle à la liste des abscisses
-//     forceVsAngleY.push(parseFloat(forceValue)); // Ajoute la force à la liste des ordonnées
-
-//     console.log("📈 Tracé Force vs Angle:", forceVsAngleX, forceVsAngleY); // Affiche les données actuelles en console
-
-//     Plotly.newPlot('graph-force-vs-angle', [{ // Crée un nouveau graphique dans la div avec l’ID donné
-//         x: forceVsAngleX, // Axe des abscisses : angles libres
-//         y: forceVsAngleY, // Axe des ordonnées : forces
-//         mode: 'markers', // Type de graphique : nuage de points
-//         name: 'Force vs Angle libre', // Légende de la courbe
-//         line: { color: color } // Couleur de la courbe
-//     }], {
-//         xaxis: { title: 'Angle libre (°)' }, // Titre de l’axe des abscisses
-//         yaxis: { title: 'Force (N)' }, // Titre de l’axe des ordonnées
-//         margin: { l: 50, r: 30, t: 20, b: 50 }, // Marges du graphique
-//         title: "Force en fonction de l'angle mesuré (libre)" // Titre du graphique
-//     }, { responsive: true }); // Rend le graphique adaptatif à la taille de l’écran
-// }
-
 
 // --------------------------------------------------
 // Rend les graphiques adaptatifs au redimensionnement de la fenêtre
@@ -325,7 +331,16 @@ document.getElementById('saveButton').addEventListener('click', function() { // 
         amplitude_distal: { // Données d’amplitude pour la phalange distale
             time: angleTime, // Liste des instants correspondants (mêmes que ci-dessus)
             data: angleData // Valeurs angulaires mesurées pour la phalange distale
-        }
+        },
+        series: measurementSeries.map(serie => {
+            return {
+                label: serie.label,           // "Blocage D-I à 30°"
+                color: serie.color,           // Couleur de la série
+                dataX: serie.dataX,           // Angles libres
+                dataY: serie.dataY            // Forces correspondantes
+            };
+        })
+
     });
     alert('Donnees envoyees pour sauvegarde !'); // Affiche une alerte pour confirmer l’envoi des données à l’utilisateur
 });
@@ -366,26 +381,30 @@ function onStartMeasurementSeries() {
     // Fonction appelée lorsqu'on clique sur le bouton "Démarrer une nouvelle mesure"
     // Elle détermine automatiquement quel angle utiliser en fonction de la phalange bloquée
     // Puis elle démarre une nouvelle série de mesure si un angle valide est disponible
+    console.log("🟢 Nouvelle mesure démarrée — angleDistal:", latestDistal, "angleProximal:", latestProximal);
+    
+    let angleMesure = null; // Initialisation d'une variable qui contiendra la valeur de l’angle libre à utiliser
+    let angleBlocage = null; // Initialise la variable qui contiendra l’angle de blocage détecté
 
-    // Initialisation d'une variable qui contiendra la valeur de l’angle libre à utiliser
-    let angleMesure = null;
-
-    // Si la phalange bloquée est la proximale (la plus proche de la paume)
+    // Si la phalange bloquée est la proximale (côté paume)
     if (blockedPhalange === "proximale") {
-        // Alors l’angle libre à mesurer est celui de la phalange distale
-        angleMesure = latestDistal;
-    } else if (blockedPhalange === "distale") {
-        // Si la phalange bloquée est la distale (au bout du doigt)
-        // Alors l’angle libre à mesurer est celui de la phalange proximale
-        angleMesure = latestProximal;
+        angleBlocage = latestProximal;   // ➤ Alors l’angle de blocage est celui mesuré au niveau de la phalange proximale
+    } 
+    // Si la phalange bloquée est la distale (au bout du doigt)
+    else if (blockedPhalange === "distale") {
+        angleBlocage = latestDistal;     // ➤ Alors l’angle de blocage est celui mesuré au niveau de la phalange distale
     }
 
+    angleMesure = angleBlocage; // ✅ ➕ Ajoute cette ligne
+    
+    document.getElementById("autoAngleDisplay").textContent = `${parseInt(angleBlocage)}°`; // ⬅️ Met à jour l'affichage de l’angle de blocage détecté (ex : "45°") en le convertissant en entier puis en l'affichant dans l’élément HTML d’ID "autoAngleDisplay"
+
     // Vérifie si un angle a bien été détecté
-    if (!angleMesure) {
-        // Si ce n’est pas le cas, on alerte l’utilisateur et on arrête l'exécution
+    if (angleMesure === null || angleMesure === undefined || isNaN(parseFloat(angleMesure))) {
         alert("Aucun angle détecté pour démarrer la mesure.");
         return;
     }
+
 
     // Convertit l’angle en entier (ex. 45.6 devient 45), puis ajoute le symbole °
     // Cela permet de créer une étiquette lisible pour l’interface utilisateur
@@ -436,47 +455,38 @@ function startNewMeasurementSeries(angleLabel) {
         dataX: [],                              // Liste des angles
         dataY: [],                              // Liste des forces
         startForce: null,                       // Valeur de force initiale
-        stopped: false                          // Indique si la série est terminée
-    };
+        stopped: false,                          // Indique si la série est terminée
+         };
 }
 
+
+// --------------------------------------------------
+// Ajoute une mesure (force + angle) à la série en cours
+// --------------------------------------------------
 
 function appendToCurrentSeries(force, angle) {
-    // Si aucune série n’est active ou si elle est déjà arrêtée, on quitte
+    // Si aucune série n’est active OU si la série est marquée comme terminée, on ne fait rien
     if (!currentSeries || currentSeries.stopped) return;
 
-    // Si la force de départ n’a pas encore été définie, on l’initialise avec la première valeur reçue
+    // --------------------------------------------------
+    // 1️⃣ Initialisation de la force de départ
+    // --------------------------------------------------
+
+    // Si c’est la toute première mesure, on enregistre la valeur de force comme référence initiale
     if (currentSeries.startForce === null) {
         currentSeries.startForce = force;
-    } else {
-        // Définition d’une tolérance de 10% autour de la force initiale
-        const tol = 0.1 * currentSeries.startForce;
-
-        // Si la force est revenue proche de la valeur de départ ET qu’il y a suffisamment de points
-        if (Math.abs(force - currentSeries.startForce) < tol && currentSeries.dataX.length > 3) {
-            currentSeries.stopped = true; // Marque la série comme terminée
-            measurementSeries.push(currentSeries); // Ajoute à l'historique des séries
-
-            // Ajoute la série terminée dans la liste déroulante de sélection
-            const option = document.createElement("option");
-            option.value = currentSeries.label;
-            option.textContent = currentSeries.label;
-            option.style.color = currentSeries.color; 
-            document.getElementById("seriesSelector").appendChild(option);
-
-            currentSeries = null;          // Réinitialise la série courante
-            renderForceVsAnglePlot();      // Met à jour le graphique
-            return;                        // Fin de la fonction ici (ne pas ajouter le point)
-        }
     }
 
-    // Ajoute les nouvelles valeurs mesurées (force, angle) dans la série en cours
-    currentSeries.dataX.push(angle); // Ajoute un angle (X)
-    currentSeries.dataY.push(force); // Ajoute une force (Y)
+    // --------------------------------------------------
+    // 6️⃣ Ajout du point (angle + force) à la série en cours
+    // --------------------------------------------------
 
-    // Met à jour le graphique avec les nouvelles données
-    renderForceVsAnglePlot();
+    currentSeries.dataX.push(angle); // Ajoute la valeur d’angle à la liste X (abscisses)
+    currentSeries.dataY.push(force); // Ajoute la valeur de force à la liste Y (ordonnées)
+
+    renderForceVsAnglePlot(); // Met à jour le graphique avec tous les points présents
 }
+
 
 function renderForceVsAnglePlot() {
     // Récupère la série sélectionnée dans la liste déroulante (ou "all" si aucune)
@@ -541,4 +551,5 @@ function simulateFakeMeasurementSeries(angleLabel = "45°") {
     }
 
     appendToCurrentSeries(baseForce, angleLabel === "30°" ? 42 : 63);
+    console.log("✅ currentSeries (nouvelle):", currentSeries);
 }

@@ -240,3 +240,13 @@ h2 {
     margin-top: 5px;              /* Petit espace au-dessus du select (séparation du label) */
     font-size: 14px;              /* Taille de police standard pour lisibilité et cohérence avec les autres champs */
 }
+
+/* --- BOUTON "INTERRUPTRE LA MESURE" : gris au repos, rouge au survol --- */
+.start-button.danger {
+    background-color: #6c757d;     /* Gris neutre par défaut (Bootstrap secondary) */
+    color: white;                  /* Texte blanc */
+}
+
+.start-button.danger:hover {
+    background-color: #dc3545;     /* Rouge vif au survol (Bootstrap danger) */
+}
